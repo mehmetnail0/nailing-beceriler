@@ -19,7 +19,8 @@ Sıra önerisi: önce `icp-bulucu`, sonra `teklif-kurucu`, sonra `vsl-yazici`. H
 
 ```bash
 git clone https://github.com/mehmetnail0/nailing-beceriler ~/nailing-beceriler
-cp -R ~/nailing-beceriler/*/ ~/.claude/skills/
+mkdir -p ~/.claude/skills
+cp -R ~/nailing-beceriler/*-* ~/.claude/skills/
 ```
 
 Sonra Claude Code'u aç ve tablodaki cümlelerden birini yaz. Video becerileri ilk çalışmada kendi kurulum kontrolünü yapar (ffmpeg, python paketleri, kişi kesme modeli); ne eksikse söyler.
