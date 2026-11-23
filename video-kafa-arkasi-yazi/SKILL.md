@@ -5,6 +5,9 @@ description: Kendi dikey konuşma klibini kendi Claude Code'unla "Sinematik akı
 
 # Kafa arkası yazı (Sinematik akış)
 
+## Kimin tarzı
+Tarz: realskytan'ın kafa arkası akan yazı üslubu (herkese açık reellerinden ölçüldü). Bu klasör bu reellerden öğrenir, onları yeniden paylaşmaz: pakette yalnız bağlantılar ve bizim ölçtüğümüz sayılar var; kimsenin videosu, karesi, kapağı ya da konuşma yazısı yok.
+
 ## Ne yapar
 Kendi konuşma klibinden başımın arkasından akan grafikler, el yazısı başlık ve aşağıdan yukarı solarak girip çıkan yazılar. Kurguyu senin Claude'un yapar: videoyu kod olarak kurar, kendi karelerine bakar, sen kareye not bıraktıkça düzeltir.
 

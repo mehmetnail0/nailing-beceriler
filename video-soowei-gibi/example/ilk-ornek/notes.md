@@ -1,4 +1,4 @@
-# Çalışılmış örnek: video-otantik-roportaj (sakin, otantik konuşma; başın arkasında büyük kelime)
+# Çalışılmış örnek: video-soowei-gibi (sakin, otantik konuşma; başın arkasında büyük kelime)
 
 Klip: aydınlık bir odada, açık renk duvarın ve kitaplı bir masanın önünde 3 dakikalık oturarak konuşma (kurgu için uydurulmuş örnek metin, gerçek bir konuşma değil). Çıktı: 1080x1920, 30 kare, 35,9 sn, 8 kesim, 35 altyazı sayfası.
 

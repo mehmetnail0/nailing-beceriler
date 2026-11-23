@@ -1,0 +1,1231 @@
+{
+ "fps": 30,
+ "mezz": "work/mezz.mp4",
+ "mezz_w": 720,
+ "mezz_h": 1280,
+ "audio": "a48.wav",
+ "lut": "work/look.cube",
+ "fonts": "fonts",
+ "style": "sade",
+ "segments": [
+  {
+   "in": 0.0,
+   "out": 6.508,
+   "x": 0
+  },
+  {
+   "in": 6.508,
+   "out": 12.26,
+   "x": 0
+  },
+  {
+   "in": 12.26,
+   "out": 15.518,
+   "x": 0
+  },
+  {
+   "in": 15.518,
+   "out": 18.722,
+   "x": 0
+  },
+  {
+   "in": 18.722,
+   "out": 24.381,
+   "x": 0
+  },
+  {
+   "in": 24.381,
+   "out": 27.756,
+   "x": 0
+  }
+ ],
+ "caption": {
+  "font": "Inter.ttf",
+  "weight": 800,
+  "size": 74,
+  "y": 0.565,
+  "maxw": 900,
+  "color": "#FFFFFF",
+  "shadow": [
+   10,
+   0.6
+  ],
+  "fade": 0.05,
+  "rise": 0,
+  "bez": [
+   0.25,
+   0.1,
+   0.25,
+   1
+  ]
+ },
+ "captions": [
+  {
+   "t": 0.35,
+   "e": 0.938,
+   "text": "Kahveyi",
+   "key": []
+  },
+  {
+   "t": 0.939,
+   "e": 1.274,
+   "text": "evde",
+   "key": []
+  },
+  {
+   "t": 1.275,
+   "e": 2.031,
+   "text": "demlerken",
+   "key": []
+  },
+  {
+   "t": 2.032,
+   "e": 2.535,
+   "text": "herkes",
+   "key": []
+  },
+  {
+   "t": 2.536,
+   "e": 2.872,
+   "text": "aynı",
+   "key": []
+  },
+  {
+   "t": 2.873,
+   "e": 3.376,
+   "text": "hatayı",
+   "key": []
+  },
+  {
+   "t": 3.377,
+   "e": 4.17,
+   "text": "yapıyor.",
+   "key": []
+  },
+  {
+   "t": 4.33,
+   "e": 4.683,
+   "text": "Suyu",
+   "key": []
+  },
+  {
+   "t": 4.684,
+   "e": 5.215,
+   "text": "kaynar",
+   "key": []
+  },
+  {
+   "t": 5.216,
+   "e": 5.747,
+   "text": "kaynar",
+   "key": []
+  },
+  {
+   "t": 5.748,
+   "e": 6.488,
+   "text": "dökmek.",
+   "key": []
+  },
+  {
+   "t": 6.648,
+   "e": 6.97,
+   "text": "Oysa",
+   "key": []
+  },
+  {
+   "t": 6.971,
+   "e": 7.132,
+   "text": "su",
+   "key": []
+  },
+  {
+   "t": 7.133,
+   "e": 7.616,
+   "text": "doksan",
+   "key": []
+  },
+  {
+   "t": 7.617,
+   "e": 7.858,
+   "text": "beş",
+   "key": []
+  },
+  {
+   "t": 7.859,
+   "e": 8.343,
+   "text": "derece",
+   "key": []
+  },
+  {
+   "t": 8.344,
+   "e": 9.029,
+   "text": "olmalı.",
+   "key": []
+  },
+  {
+   "t": 9.189,
+   "e": 9.355,
+   "text": "Bu",
+   "key": []
+  },
+  {
+   "t": 9.356,
+   "e": 9.774,
+   "text": "küçük",
+   "key": []
+  },
+  {
+   "t": 9.775,
+   "e": 10.109,
+   "text": "fark",
+   "key": []
+  },
+  {
+   "t": 10.11,
+   "e": 10.444,
+   "text": "tadı",
+   "key": []
+  },
+  {
+   "t": 10.445,
+   "e": 11.03,
+   "text": "tamamen",
+   "key": []
+  },
+  {
+   "t": 11.031,
+   "e": 12.24,
+   "text": "değiştiriyor.",
+   "key": []
+  },
+  {
+   "t": 12.4,
+   "e": 12.995,
+   "text": "Birinci",
+   "key": []
+  },
+  {
+   "t": 12.996,
+   "e": 13.42,
+   "text": "adım,",
+   "key": []
+  },
+  {
+   "t": 13.421,
+   "e": 13.76,
+   "text": "suyu",
+   "key": []
+  },
+  {
+   "t": 13.761,
+   "e": 14.016,
+   "text": "bir",
+   "key": []
+  },
+  {
+   "t": 14.017,
+   "e": 14.526,
+   "text": "dakika",
+   "key": []
+  },
+  {
+   "t": 14.527,
+   "e": 15.498,
+   "text": "bekletmek.",
+   "key": []
+  },
+  {
+   "t": 15.658,
+   "e": 16.158,
+   "text": "İkinci",
+   "key": []
+  },
+  {
+   "t": 16.159,
+   "e": 16.576,
+   "text": "adım,",
+   "key": []
+  },
+  {
+   "t": 16.577,
+   "e": 17.161,
+   "text": "kahveyi",
+   "key": []
+  },
+  {
+   "t": 17.162,
+   "e": 17.495,
+   "text": "ağır",
+   "key": []
+  },
+  {
+   "t": 17.496,
+   "e": 17.829,
+   "text": "ağır",
+   "key": []
+  },
+  {
+   "t": 17.83,
+   "e": 18.702,
+   "text": "ıslatmak.",
+   "key": []
+  },
+  {
+   "t": 18.862,
+   "e": 19.397,
+   "text": "Üçüncü",
+   "key": []
+  },
+  {
+   "t": 19.398,
+   "e": 19.844,
+   "text": "adım,",
+   "key": []
+  },
+  {
+   "t": 19.845,
+   "e": 20.47,
+   "text": "sabırlı",
+   "key": []
+  },
+  {
+   "t": 20.471,
+   "e": 21.127,
+   "text": "olmak.",
+   "key": []
+  },
+  {
+   "t": 21.287,
+   "e": 21.961,
+   "text": "Denersen",
+   "key": []
+  },
+  {
+   "t": 21.962,
+   "e": 22.383,
+   "text": "farkı",
+   "key": []
+  },
+  {
+   "t": 22.384,
+   "e": 22.636,
+   "text": "ilk",
+   "key": []
+  },
+  {
+   "t": 22.637,
+   "e": 23.227,
+   "text": "yudumda",
+   "key": []
+  },
+  {
+   "t": 23.228,
+   "e": 24.361,
+   "text": "hissedersin.",
+   "key": []
+  },
+  {
+   "t": 24.521,
+   "e": 25.28,
+   "text": "Yorumlara",
+   "key": []
+  },
+  {
+   "t": 25.281,
+   "e": 25.702,
+   "text": "demle",
+   "key": []
+  },
+  {
+   "t": 25.703,
+   "e": 26.04,
+   "text": "yaz,",
+   "key": []
+  },
+  {
+   "t": 26.041,
+   "e": 26.546,
+   "text": "tarifi",
+   "key": []
+  },
+  {
+   "t": 26.547,
+   "e": 27.596,
+   "text": "yollayayım.",
+   "key": []
+  }
+ ],
+ "layers": [
+  {
+   "t": 0,
+   "e": 27.756,
+   "kind": "bar",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.2552,
+   "align": "center",
+   "bar": {
+    "w": 1080,
+    "h": 980,
+    "color": "#08080A",
+    "opacity": 1.0,
+    "radius": 0
+   }
+  },
+  {
+   "t": 0.35,
+   "e": 4.33,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Kahvede",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 0.4,
+   "e": 4.33,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "tek hata",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 4.33,
+   "e": 6.648,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Suyu",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 4.38,
+   "e": 6.648,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "kaynar dökme",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 6.648,
+   "e": 9.189,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Doğrusu",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 6.698,
+   "e": 9.189,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "95 derece",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 9.189,
+   "e": 12.4,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Küçük fark",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 9.239,
+   "e": 12.4,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "büyük tat",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 12.4,
+   "e": 15.658,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Adım 1",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 12.45,
+   "e": 15.658,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "suyu bekle",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 15.658,
+   "e": 18.862,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Adım 2",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 15.708,
+   "e": 18.862,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "ağır ağır ıslat",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 18.862,
+   "e": 21.287,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Adım 3",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 18.912,
+   "e": 21.287,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "sabır",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 21.287,
+   "e": 24.521,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Denersen",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 21.337,
+   "e": 24.521,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "ilk yudum",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 24.521,
+   "e": 27.756,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.085,
+   "align": "center",
+   "text": {
+    "text": "Yorumlara yaz",
+    "font": "Inter.ttf",
+    "weight": 700,
+    "size": 46,
+    "color": "#E9E9EE",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 26,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 24.571,
+   "e": 27.756,
+   "kind": "text",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.155,
+   "align": "center",
+   "text": {
+    "text": "demle",
+    "font": "InstrumentSerif-Italic.ttf",
+    "weight": null,
+    "size": 92,
+    "color": "#F4F1E6",
+    "lh": 1.05,
+    "shadow": [
+     10,
+     0.6
+    ]
+   },
+   "in": {
+    "d": 0.3,
+    "dy": 34,
+    "blur": 8,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.18
+   }
+  },
+  {
+   "t": 6.648,
+   "e": 12.12,
+   "kind": "image",
+   "behind": false,
+   "x": 0.5,
+   "y": 0.34,
+   "file": "work/cards/diagram.png",
+   "w": 700,
+   "in": {
+    "d": 0.45,
+    "scale": 0.88,
+    "blur": 10,
+    "bez": [
+     0.16,
+     1,
+     0.3,
+     1
+    ]
+   },
+   "out": {
+    "d": 0.25
+   }
+  }
+ ],
+ "inserts": [
+  {
+   "t": 15.958,
+   "d": 1.5,
+   "in": 0,
+   "file": "work/br0.mp4",
+   "full": true,
+   "zoom": [
+    1.0,
+    1.06
+   ],
+   "dissolve": 0.15
+  }
+ ],
+ "camera": [
+  {
+   "t": 0.0,
+   "d": 0,
+   "to": 1.0,
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 1.042,
+   "d": 0.417,
+   "to": 1.0,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 3.125,
+   "d": 0.417,
+   "to": 1.0366,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 5.208,
+   "d": 0.417,
+   "to": 1.0744,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 6.508,
+   "d": 0,
+   "to": 1.1,
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 7.55,
+   "d": 0.417,
+   "to": 1.1402,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 9.633,
+   "d": 0.417,
+   "to": 1.1819,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 11.716,
+   "d": 0.417,
+   "to": 1.1402,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 12.26,
+   "d": 0,
+   "to": 1.0,
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 13.302,
+   "d": 0.417,
+   "to": 1.0,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 15.518,
+   "d": 0,
+   "to": 1.1,
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 16.56,
+   "d": 0.417,
+   "to": 1.1402,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 18.722,
+   "d": 0,
+   "to": 1.0,
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 19.764,
+   "d": 0.417,
+   "to": 1.0,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 21.847,
+   "d": 0.417,
+   "to": 1.0366,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 24.381,
+   "d": 0,
+   "to": 1.1,
+   "cx": 0.5,
+   "cy": 0.5
+  },
+  {
+   "t": 25.423,
+   "d": 0.417,
+   "to": 1.1,
+   "bez": [
+    0.28,
+    0.67,
+    0.38,
+    0.27
+   ],
+   "cx": 0.5,
+   "cy": 0.5
+  }
+ ]
+}

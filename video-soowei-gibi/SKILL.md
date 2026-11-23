@@ -1,14 +1,17 @@
 ---
-name: video-otantik-roportaj
-description: Kendi dikey konuşma klibini kendi Claude Code'unla "Otantik" tarzında kurgular (masa başı konuşma ile ara görüntüler arasında gidip gelen, tek kelimelik altyazılı, sıcak-nötr renkli, hafif hareketli kurgu). "otantik", "doğal röportaj" ya da "böyle editle" dendiğinde kullan.
+name: video-soowei-gibi
+description: Kendi dikey konuşma klibini kendi Claude Code'unla "SooWei gibi" kurgular (masa başı konuşma ile kendi hayatından ara görüntüler arasında gidip gelen, küçük harfli sakin altyazı, sıcak-nötr renk, hafif hareket). "SooWei gibi", "otantik röportaj", "doğal anlatım" dendiğinde kullan.
 ---
 
-# Otantik röportaj
+# SooWei gibi
 
 ## Ne yapar
 Kendi konuşma klibinden masa başı konuşma ile kendi hayatından ara görüntüler arasında gidip gelen, görüntünün içine oturan tek kelimelik altyazılı, sıcak-nötr renkli, az ve hafif hareketli bir kurgu. Kurguyu senin Claude'un yapar: videoyu kod olarak kurar, kendi karelerine bakar, sen kareye not bıraktıkça düzeltir.
 
-Üslubun referansı herkese açık bir videodan kare kare ölçüldü; o başkasının işidir: ondan öğren, kendi videonda kendi klibini kullan, onu ya da karelerini yeniden paylaşma.
+## Kimin tarzı, hangi reellerden
+Tarz: SooWei Goh. İzlenmesi en yüksek reellerinden 5'i kare kare ölçüldü (bağlantılar, izlenme sayıları ve ne alındığı `reference/kaynaklar.md` içinde). Üslubun asıl ölçüsü ilk iki reel: kesim 2.1/10 sn, ortanca plan 3.7 s, zoom 5.7/10 sn, ortanca zoom %3.5, 0.57 s, doygunluk 0.35. Her reelin tek tek sayıları `reference/hareket-<id>.json` içinde. Bunlar başkasının işidir: ondan öğren, kendi videonda kendi klibini kullan, onu ya da karelerini yeniden paylaşma; pakette kimsenin videosu ya da karesi yok.
+
+Bu tarzın uydurma test klibinde kurulmuş örneği `example/` içinde (`kanit-kontak.jpg`); bu klasörün eski ilk örneği `example/ilk-ornek/`.
 
 ## Ne gerekir
 - Kendi Claude Code'un (herhangi bir plan). Claude.ai sohbetinde değil, Claude Code'da çalışır.
@@ -25,7 +28,7 @@ Eksik olanı ve nasıl kurulacağını düz cümleyle yazar; her şey tamsa `rea
 
 ## Nasıl başlarsın
 1. Bu klasörü Claude Code'da aç (ya da `~/.claude/skills/` altına koy), klibini yanına bırak.
-2. Claude'a şunu yaz: "Videomu Otantik tarzında kurgula". Gerisini Claude yapar: kurulumu kontrol eder, ne dediğini yazıya döker ve yanlış duyduğu kelimeleri sana sorar, kesimi kurar, kısa bir kanıt render'ı alır, kendi karelerine bakar, sonra tamamını verir.
+2. Claude'a şunu yaz: "Videomu SooWei gibi kurgula". Gerisini Claude yapar: kurulumu kontrol eder, ne dediğini yazıya döker ve yanlış duyduğu kelimeleri sana sorar, kesimi kurar, kısa bir kanıt render'ı alır, kendi karelerine bakar, sonra tamamını verir.
 3. İlk kurgu taslaktır. Hangi saniyede neyin yanlış olduğunu bir editöre söylediğin gibi söyle ("şu saniyede başlık geç giriyor"); Claude yalnız onu değiştirip yeniden render eder.
 
 Çıktı: kendi klibinin kurgulanmış hali, H.264 mp4 (dikey 1080x1920, 30 kare) ve bir kontrol karesi.
@@ -117,4 +120,4 @@ Work in a new folder `work/` next to this file. `S=scripts`.
 - `inserts`, `accents`: b-roll windows and big words (see `scripts/check_edit.py` for the fields it accepts).
 
 ## Worked example
-A finished reel made with this folder alone: `example/notes.md` (what was measured, what was decided, timestamps) and `example/edit.json` (the exact edit). Read it once before your first edit; do not copy its choices, the user's clip and refs decide.
+A finished reel made with this folder alone: `example/ilk-ornek/notes.md` (what was measured, what was decided, timestamps) and `example/ilk-ornek/edit.json` (the exact edit). Read it once before your first edit; do not copy its choices, the user's clip and refs decide.

@@ -5,6 +5,9 @@ description: Kendi dikey konuşma klibini kendi Claude Code'unla "Sinematik sade
 
 # Sinematik sade
 
+## Kimin tarzı
+Tarz: Nik'in sinematik sade üslubu (kendi referans videosundan kare kare ölçüldü). Bu klasör bu reellerden öğrenir, onları yeniden paylaşmaz: pakette yalnız bağlantılar ve bizim ölçtüğümüz sayılar var; kimsenin videosu, karesi, kapağı ya da konuşma yazısı yok.
+
 ## Ne yapar
 Kendi konuşma klibinden sakin, sinematik bir konuşma reeli: tek sahne planı, küçük altın italik serif altyazı, cümlesine denk gelen hayat görüntüleri, seyrek kesim patlamaları. Kurguyu senin Claude'un yapar: videoyu kod olarak kurar, kendi karelerine bakar, sen kareye not bıraktıkça düzeltir.
 

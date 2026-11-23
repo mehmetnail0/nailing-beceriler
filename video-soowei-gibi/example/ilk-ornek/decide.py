@@ -1,4 +1,4 @@
-"""video-otantik-roportaj worked example: my decisions for a sample clip (190 s talking head, desk behind, face fills the upper half).
+"""video-soowei-gibi worked example: my decisions for a sample clip (190 s talking head, desk behind, face fills the upper half).
 Every number names its source: H = reference/hareket.json, F = SKILL.md finished-edit values, M = SKILL.md measured grammar, S = my look at work/src.jpg."""
 import json, os, subprocess, sys
 K = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); W_ = os.path.join(K, 'work')
