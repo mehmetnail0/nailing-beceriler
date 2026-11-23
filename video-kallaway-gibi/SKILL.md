@@ -63,6 +63,13 @@ Ortancalar: kesim 2.23 /10 sn, ortanca plan 3.504 s, zoom 4.8 /10 sn, ortanca zo
 - **Renk:** doğal; Kallaway'in zemini siyah, görüntü soğuk-yeşilimsi bir ışıkta.
 - `edit.json` içinde `"style": "sade"` kalsın ve altyazı biçimini `caption` ile açıkça yaz (yazı tipi, boyut, renk); `sade` yalnız yedek ön ayardır.
 
+## Kendi referansını ölç (isteğe bağlı, ama en iyisi)
+Beğendiğin bir reeli klasöre bırak (ekran kaydı ya da kendi indirdiğin dosya, `ref.mp4`). Sonra:
+
+    python3 scripts/tarz_cikar.py olc ref.mp4 --out work/ref
+
+`work/ref/hareket.json` çıkar: kesim ritmi, her zoomun başlangıcı, süresi, yüzdesi ve eğrisi, parlamalar, katman girişleri, renk ve ses. Kendi kurgunu o sayılara göre kur; `reference/hareket-*.json` yalnız başlangıç verisidir, seninkinin altında kalır. Kurgun bitince `python3 scripts/tarz_cikar.py olc work/out.mp4 --out work/own` ile kendi çıktını ölç, `python3 scripts/tarz_cikar.py karsilastir work/ref/hareket.json work/own/hareket.json` ile alan alan karşılaştır. Gerekenler `setup_check.py` içinde (opencv, scipy). Videoyu karelerine de bak: `bash scripts/sheet.sh ref.mp4 work/ref.jpg 1`.
+
 ## Workflow (you, the model, decide every look value from the refs; the scripts only execute)
 Work in a new folder `work/` next to this file. `S=scripts`.
 1. **Look at the source.** `bash $S/mezz.sh clip.mov work` (SDR 1440x2560 30 fps mezz + 48 kHz wav; HLG/HDR is tone-mapped).

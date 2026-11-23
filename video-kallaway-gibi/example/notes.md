@@ -10,3 +10,4 @@ Bu klasör, becerinin çalıştığını göstermek için uydurulmuş bir test k
 - Ölçülen ortancalar: kesim 2.23/10 sn, plan 3.504 s, zoom 4.8/10 sn, ortanca zoom %3.655, 0.417 s, doygunluk 0.162.
 - Bu sayılar `reference/kaynaklar.md` içindeki reellerden bizim ölçtüğümüz sayılardır; kurgu onlara göre kuruldu.
 - Konuşmacı çizgi film olduğu için yüz takibi ve kesim kalitesi bu örnekte kanıtlanmış sayılmaz; kanıtlanan şey zamanlama, katman ve altyazı dilidir.
+- Uydurma klip, ara görüntüler ve kartlar pakete konmadı; `edit.json` yapıyı göstermek içindir, olduğu gibi render edilmez. Kendi klibinle çalışmak için SKILL.md içindeki akış yeter.

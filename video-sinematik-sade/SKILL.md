@@ -63,6 +63,13 @@ Taken from the finished edit of this style (the numbers go into `edit.json`; the
 - **Camera:** Opens on a settle 1.188 to 1.0 over 0.9 s (bezier 0.192,0.365,0.094,0.925); long drift +11 % over 8.1 s (0.12,0.007,0.85,0.929) on a calm passage; overshoot push over 0.53 s (0.189,1.145,0.963,0.968) on the key moment; hard punch 1.0 / 1.06 on every cut.
 - Set `"style": "sade"` in `edit.json`.
 
+## Kendi referansını ölç (isteğe bağlı, ama en iyisi)
+Beğendiğin bir reeli klasöre bırak (ekran kaydı ya da kendi indirdiğin dosya, `ref.mp4`). Sonra:
+
+    python3 scripts/tarz_cikar.py olc ref.mp4 --out work/ref
+
+`work/ref/hareket.json` çıkar: kesim ritmi, her zoomun başlangıcı, süresi, yüzdesi ve eğrisi, parlamalar, katman girişleri, renk ve ses. Kendi kurgunu o sayılara göre kur; `reference/hareket-*.json` yalnız başlangıç verisidir, seninkinin altında kalır. Kurgun bitince `python3 scripts/tarz_cikar.py olc work/out.mp4 --out work/own` ile kendi çıktını ölç, `python3 scripts/tarz_cikar.py karsilastir work/ref/hareket.json work/own/hareket.json` ile alan alan karşılaştır. Gerekenler `setup_check.py` içinde (opencv, scipy). Videoyu karelerine de bak: `bash scripts/sheet.sh ref.mp4 work/ref.jpg 1`.
+
 ## Workflow (you, the model, decide every look value from the refs; the scripts only execute)
 Work in a new folder `work/` next to this file. `S=scripts`.
 1. **Look at the source.** `bash $S/mezz.sh clip.mov work` (SDR 1440x2560 30 fps mezz + 48 kHz wav; HLG/HDR is tone-mapped).

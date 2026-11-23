@@ -84,6 +84,13 @@ Taken from the finished edit of this style (the numbers go into `edit.json`; the
 
 How to read it: zooms in a selfie are mostly his own hand moving (the raw takes already read 11.66/10 s, like the handheld reference reel); the face-normalised crop cut the median apparent zoom from 5.85 % to 4.15 % and pushes from 9.5 % to 4.2 %. The tracker does not see dissolves or same-room cuts as cuts, so cuts/10 s comes from the EDL. SooWei captions mostly land hard (0.85–0.97 of pages on one frame); layer entries settle over 3 frames. Every camera move in v3 uses the measured push curve or a gentle ease-out (0.25,0.1,0.25,1).
 
+## Kendi referansını ölç (isteğe bağlı, ama en iyisi)
+Beğendiğin bir reeli klasöre bırak (ekran kaydı ya da kendi indirdiğin dosya, `ref.mp4`). Sonra:
+
+    python3 scripts/tarz_cikar.py olc ref.mp4 --out work/ref
+
+`work/ref/hareket.json` çıkar: kesim ritmi, her zoomun başlangıcı, süresi, yüzdesi ve eğrisi, parlamalar, katman girişleri, renk ve ses. Kendi kurgunu o sayılara göre kur; `reference/hareket-*.json` yalnız başlangıç verisidir, seninkinin altında kalır. Kurgun bitince `python3 scripts/tarz_cikar.py olc work/out.mp4 --out work/own` ile kendi çıktını ölç, `python3 scripts/tarz_cikar.py karsilastir work/ref/hareket.json work/own/hareket.json` ile alan alan karşılaştır. Gerekenler `setup_check.py` içinde (opencv, scipy). Videoyu karelerine de bak: `bash scripts/sheet.sh ref.mp4 work/ref.jpg 1`.
+
 ## Workflow (you, the model, decide every look value from the refs; the scripts only execute)
 Work in a new folder `work/` next to this file. `S=scripts`.
 1. **Look at the source.** `bash $S/mezz.sh clip.mov work` (SDR 1440x2560 30 fps mezz + 48 kHz wav; HLG/HDR is tone-mapped).
