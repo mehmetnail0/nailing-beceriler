@@ -19,6 +19,9 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 - https://www.youtube.com/watch?v=FMzKk73iUhw — Alex Hormozi, hızlı müşteri bulma: başkalarının ücret aldığı şeyden iyisini ücretsiz vermek, satış ortaklığında cömert komisyon.
 - https://www.youtube.com/watch?v=LqC-oXjatmA — Alex Hormozi, iyi pazarın dört ölçütü.
 
+## Hormozi kitapları (yerel kopya)
+- $100M Offers, $100M Money Models, $100M Leads: satın alınmış kitaplar, yalnız Nail'in Mac'inde; özet ve atıflar `referans/hormozi-kitaplari.md` içinde.
+
 ## Uzman vakaları
 - https://www.youtube.com/watch?v=wdnxr9kNu30 — SooWei Goh, birebir seans: “hâlâ işi yapan öğretmen” konumu, eleme dili.
 - https://www.youtube.com/watch?v=KW7PH4wqayA — SooWei Goh: yeni fırsat sat (iyileştirme değil), ne ver nasıl'ı saklı tut.
@@ -31,7 +34,7 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 - Rakamlar konuşanların kendi beyanıdır, doğrulanmadı.
 
 ## Bilinmesi gerekenler
-- $100M Leads'teki “dört temel yol” (tanıdığa ve tanımadığa birebir ulaşma, içerik, reklam) için ayrı bir kaynak açılamadı; genel bilgi olarak not düşüldü.
+- $100M Leads'teki “dört temel yol” artık kitabın yerel kopyasından doğrulandı (Leads, “Get Leads” girişi, PDF s. 77); atıf `referans/hormozi-kitaplari.md` içinde.
 - Kırp ve yığ adımının (değer yüksek / maliyet düşük ayrımı) ayrıntısı kitabın genel özetidir; okunan kaynaklarda yalnız engel listesi ve bonus yığını geçer.
 - Teklif merdiveni, topluluk mu birebir mi kararı, satış görüşmesi akışı ve topluluk lansman planı bu kaynaklardan yola çıkan bizim sentezimizdir.
-- Kitapların kendisi okunmadı; yalnız yukarıdaki açık kaynaklar kullanıldı.
+- Kitaplar yukarıdaki YouTube satırlarında okunmadı; ayrıca üç Hormozi kitabının yerel kopyasından okunan bölümler `referans/hormozi-kitaplari.md` içinde bölüm ve PDF sayfasıyla atıflı.

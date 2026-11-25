@@ -33,3 +33,5 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 ## Bilinmesi gerekenler
 - Müşterinin işini işlevsel, duygusal ve sosyal diye üçe ayırmak yaygın bir Jobs-to-be-done uygulamasıdır; yukarıdaki kaynakta bu ayrım geçmez.
 - Levesque'nin kitabı ve ücretli eğitimi okunmadı; yalnız röportajlar kullanıldı.
+
+- Pazar seçimi (“aç kalabalık”, normal pazar): $100M Offers, böl. 4, PDF s. 50-52; özet `teklif-kurucu/referans/hormozi-kitaplari.md` içinde.

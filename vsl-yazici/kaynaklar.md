@@ -28,3 +28,5 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 
 ## Uzman anlatımları (altyazı dökümünden okundu)
 `referans/uzman-vakalari.md` içindeki Haynes, Batu Ulker, SooWei, Nik, Fazio, Moser, Elaine ve Hormozi satırlarının video kimliği ve dakikası dosyanın içinde; sözler altyazı dökümünden yeniden okundu, rakamlar konuşanların beyanı.
+
+- Eylem çağrısı (ne yapılacağı açık, neden şimdi): $100M Leads, mıknatıs bölümü adım 7, PDF s. 67; özet `teklif-kurucu/referans/hormozi-kitaplari.md` içinde.

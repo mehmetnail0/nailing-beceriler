@@ -94,4 +94,5 @@ Teklif sayfası `vsl-yazici` için girdi olur: “Bu teklifin VSL'ini yazalım m
 - `sablonlar/teklif-tek-sayfa.md`, `garanti-sablonlari.md`, `bonus-yigini.md`, `fiyat-tablosu.md`, `miknatis-teklif.md`, `satis-gorusmesi.md`, `topluluk-lansman-plani.md`.
 - `ornekler/serbest-tasarimci-fiyat-kocu.md`: `icp-bulucu` örneğinin devamı.
 - `referans/uzman-vakalari.md`: SooWei, Elaine, Usman ve Stecko teklifi, fiyatı, görüşmeyi nasıl kuruyor (kaynaklı, kendi beyanları); kullanıcı “teklifim zayıf”, “fiyat”, “garanti” derse aç.
+- `referans/hormozi-kitaplari.md`: $100M Offers, Money Models ve Leads kitaplarından bölüm ve sayfa atıflı özet (değer denklemi, garanti türleri, bonus, isim, çekim teklifleri, mıknatıs); “Hormozi kitapta ne diyor” ya da garanti ve ücretsiz giriş sorusunda aç.
 - `kaynaklar.md`: okunan kaynaklar.
