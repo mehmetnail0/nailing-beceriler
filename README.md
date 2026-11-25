@@ -4,11 +4,12 @@
 
 ![Kısa anlatım: videonu çek, beceriyi söyle, hazır reels al](gorseller/kisa-anlatim.svg)
 
-## Sekiz beceri
+## Dokuz beceri
 
 | Beceri | Ne yapar | Claude'a ne dersin |
 |---|---|---|
 | `icp-bulucu` | Kolay sorularla kime konuştuğunu çıkarır: derdi kendi kelimeleriyle, istediği, itirazları, nerede takıldığı. | “ICP’mi bul” |
+| `uzman-gorusmesi` | Bir uzmanla (mentör, koç, usta) 45-60 dakikalık ilk görüşmeyi yürütür: kime, hangi sonuç, ne sürede, neden o. Canlı sorar ya da kağıt kalemle doldurulur; çıktı `gorusme-notlari.md`. | “Uzman görüşmesi yap” |
 | `teklif-kurucu` | Nişine göre hangi paketi satabileceğini söyler, teklif merdivenini kurar: ücretsiz mıknatıs, düşük fiyat, topluluk, grup, birebir yüksek fiyat. Şablonlarıyla. | “Teklifimi kur” |
 | `vsl-yazici` | Birkaç soruyla çekime hazır satış videosu metni yazar: kısa ve uzun hali, çekim notu, ekran yazısı, çağrı. | “VSL yaz” |
 | `video-sinematik-sade` | Kendi dikey konuşma klibini sakin, sinematik bir reele çevirir. | “Sinematik sade kurgu yap” |
@@ -17,7 +18,7 @@
 | `video-kallaway-gibi` | “Kallaway gibi”: üstte siyah panelde başlık ve çizim, altta sen, kelime kelime altyazı. | “Videomu Kallaway gibi kurgula” |
 | `video-mino-gibi` | “Mino gibi”: POV başlığı, küçük altyazı, sürekli yavaş zoom, doygun renk. | “Videomu Mino gibi kurgula” |
 
-Sıra önerisi: önce `icp-bulucu`, sonra `teklif-kurucu`, sonra `vsl-yazici`. Her biri bir öncekinin dosyasını okur, yoksa sorar.
+Sıra önerisi: bir uzmanla çalışıyorsan önce `uzman-gorusmesi`, sonra `icp-bulucu`, sonra `teklif-kurucu`, sonra `vsl-yazici`. Her biri bir öncekinin dosyasını okur, yoksa sorar.
 
 Bir şey yazarak başlasan da olur (“ben şu alanda uzmanım, nasıl bir teklif kurayım?”). Beceriler yazdıklarını “bilinen / tahmin / eksik” diye ayırır, yalnız eksik soruları sorar; sırf yazdın diye adımları atlamaz. Şirkete satış (B2B), işvereni olan uzmanlar ve kendi VSL'ini yapıştıranlar için ayrı bölümleri var.
 
