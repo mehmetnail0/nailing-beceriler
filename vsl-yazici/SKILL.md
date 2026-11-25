@@ -33,6 +33,7 @@ Okuduğun referanslardan çıkardığın kalıpları (kanca tipi, hikâye uzunlu
 3. **Metni yaz.** Önce kısa, sonra uzun sürüm. Biçim: `sablonlar/cekim-plani.md`.
 4. **Kontrol listesi** (aşağıda) ile metni kendin gözden geçir, sonra teslim et.
 5. Teslimden sonra tek soru: “Hangi bölüm sana yabancı geldi?” Oradan düzelt.
+6. Video bir sayfaya konacaksa (görüşme ya da satış sayfası) `referans/sayfa-yapisi.md` ile sayfanın sırasını ve başvuru formunun sorularını öner: rozet, tek vurgulu başlık, 1-2 adım gösterimi, video, form sonra takvim.
 
 ## Sorular (tek tek, sırayla)
 
@@ -89,6 +90,7 @@ Kısa sürüm 300-700 kelime, uzun sürüm 2000-2800 kelime civarı (Türkçe ko
 ## Dosyalar
 
 - `referans/cerceveler.md`: Benson, Brunson, Hormozi, Georgi, AIDA/PAS ve bunların VSL'de nereye oturduğu.
+- `referans/sayfa-yapisi.md`: videonun durduğu görüşme sayfası; sıra, 1-2 adım gösterimi, zenginleştirilmiş form soruları, görünüm.
 - `sablonlar/kisa-vsl.md`, `sablonlar/uzun-vsl.md`: doldurulabilir iskeletler.
 - `sablonlar/acilis-kancalari.md`: açılış tipleri.
 - `sablonlar/kapanis-ve-cta.md`: kapanış tipleri, garanti cümleleri, CTA.
