@@ -2,6 +2,8 @@
 
 İçerik üreticileri, koçlar ve tek kişilik işler için Claude Code becerileri. Hepsi seni sorularla yürütür, sonunda elinde kullanılır bir dosya kalır. Hiçbiri senin yerine bir şey yollamaz ya da yayınlamaz.
 
+![Kısa anlatım: videonu çek, beceriyi söyle, hazır reels al](gorseller/kisa-anlatim.svg)
+
 ## Sekiz beceri
 
 | Beceri | Ne yapar | Claude'a ne dersin |

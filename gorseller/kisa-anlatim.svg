@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" role="img" aria-label="Nailing becerileri kısa anlatım: videonu çek, beceriyi söyle, hazır reels al.">
+<rect width="960" height="360" rx="18" fill="#14201a"/>
+<g font-family="Georgia, 'Times New Roman', serif">
+<g opacity="0"><animate attributeName="opacity" values="1;1;1;0;0" keyTimes="0.0000;0.0250;0.1750;0.2000;1.0000" dur="20s" repeatCount="indefinite"/>
+<text x="60" y="95" font-size="22" fill="#7fd1a0" font-weight="700">1 / 5</text>
+<text x="60" y="190" font-size="54" fill="#f4f1ea" font-weight="700">Kendi videonu çek</text>
+<text x="60" y="260" font-size="26" fill="#cfcabd">Telefonla, dikey, konuşarak. Başka bir şey gerekmez.</text></g>
+<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0.0000;0.2000;0.2250;0.3750;0.4000;1.0000" dur="20s" repeatCount="indefinite"/>
+<text x="60" y="95" font-size="22" fill="#7fd1a0" font-weight="700">2 / 5</text>
+<text x="60" y="190" font-size="54" fill="#f4f1ea" font-weight="700">Claude Code'a söyle</text>
+<text x="60" y="260" font-size="26" fill="#cfcabd">“Videomu SooWei gibi kurgula”</text></g>
+<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0.0000;0.4000;0.4250;0.5750;0.6000;1.0000" dur="20s" repeatCount="indefinite"/>
+<text x="60" y="95" font-size="22" fill="#7fd1a0" font-weight="700">3 / 5</text>
+<text x="60" y="190" font-size="54" fill="#f4f1ea" font-weight="700">Beceri çalışır</text>
+<text x="60" y="260" font-size="26" fill="#cfcabd">Referansı ölçer, kesimi, altyazıyı ve zoom'u kendisi kurar.</text></g>
+<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0.0000;0.6000;0.6250;0.7750;0.8000;1.0000" dur="20s" repeatCount="indefinite"/>
+<text x="60" y="95" font-size="22" fill="#7fd1a0" font-weight="700">4 / 5</text>
+<text x="60" y="190" font-size="54" fill="#f4f1ea" font-weight="700">Elinde hazır reels var</text>
+<text x="60" y="260" font-size="26" fill="#cfcabd">Kendi sesin, kendi yüzün, seçtiğin üslupta.</text></g>
+<g opacity="0"><animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0.0000;0.8000;0.8250;0.9750;1.0000;1.0000" dur="20s" repeatCount="indefinite"/>
+<text x="60" y="95" font-size="22" fill="#7fd1a0" font-weight="700">5 / 5</text>
+<text x="60" y="190" font-size="54" fill="#f4f1ea" font-weight="700">Önce işin temeli</text>
+<text x="60" y="260" font-size="26" fill="#cfcabd">icp-bulucu, teklif-kurucu, vsl-yazici: kime, ne, nasıl satacağın.</text></g>
+</g>
+<rect x="0" y="352" height="8" fill="#7fd1a0"><animate attributeName="width" values="0;960" dur="20s" repeatCount="indefinite"/></rect>
+</svg>
