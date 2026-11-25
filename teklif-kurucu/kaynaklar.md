@@ -19,6 +19,17 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 - https://www.youtube.com/watch?v=FMzKk73iUhw — Alex Hormozi, hızlı müşteri bulma: başkalarının ücret aldığı şeyden iyisini ücretsiz vermek, satış ortaklığında cömert komisyon.
 - https://www.youtube.com/watch?v=LqC-oXjatmA — Alex Hormozi, iyi pazarın dört ölçütü.
 
+## Uzman vakaları
+- https://www.youtube.com/watch?v=wdnxr9kNu30 — SooWei Goh, birebir seans: “hâlâ işi yapan öğretmen” konumu, eleme dili.
+- https://www.youtube.com/watch?v=KW7PH4wqayA — SooWei Goh: yeni fırsat sat (iyileştirme değil), ne ver nasıl'ı saklı tut.
+- https://www.youtube.com/watch?v=3lS3rUmYUdI — SooWei Goh: tek seçenek, fiyat kuralları, downsell sevmemek, eylem listesi.
+- https://www.youtube.com/watch?v=LeWICN6lliE — Usman Kayani, SooWei'nin satış hattının canlı incelemesi: VSL'de fiyat aralığı, denetim biçimi görüşme, BANT.
+- https://www.youtube.com/watch?v=dEzSwJ_osMw — Elaine Empalmado: dört aşamalı program ve haftalık kilometre taşları.
+- https://www.youtube.com/watch?v=BxvJoNRQ2Y4 — Elaine Empalmado: dört basamaklı merdiven.
+- https://www.youtube.com/watch?v=esaaJeaAU04 — Elaine Empalmado: dönüşüm hattı.
+- Stecko: kendi herkese açık Instagram, X ve randevu sayfası gözlemimiz, 20 Kasım 2026; transkript yok, fiyat bağımsız doğrulanmadı.
+- Rakamlar konuşanların kendi beyanıdır, doğrulanmadı.
+
 ## Bilinmesi gerekenler
 - $100M Leads'teki “dört temel yol” (tanıdığa ve tanımadığa birebir ulaşma, içerik, reklam) için ayrı bir kaynak açılamadı; genel bilgi olarak not düşüldü.
 - Kırp ve yığ adımının (değer yüksek / maliyet düşük ayrımı) ayrıntısı kitabın genel özetidir; okunan kaynaklarda yalnız engel listesi ve bonus yığını geçer.

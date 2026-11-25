@@ -105,4 +105,5 @@ Kart `teklif-kurucu` ve `vsl-yazici` için girdi olur. Kullanıcı kartı onayla
 - `sablonlar/konumlandirma.md`: alternatifler, farklar, değer temaları.
 - `sablonlar/dm-ve-anket.md`: doğrulama DM'leri ve tek soruluk anket.
 - `ornekler/serbest-tasarimci-fiyat-kocu.md`: baştan sona bir örnek.
+- `referans/uzman-vakalari.md`: SooWei, Elaine, Usman ve Stecko ICP'yi nasıl buluyor (kaynaklı, kendi beyanları); kullanıcı “nasıl bulurum”, “kimi almayayım” derse aç.
 - `kaynaklar.md`: okunan kaynaklar.

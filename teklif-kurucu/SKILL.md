@@ -93,4 +93,5 @@ Teklif sayfası `vsl-yazici` için girdi olur: “Bu teklifin VSL'ini yazalım m
 - `referans/merdiven-ve-fiyat.md`: teklif merdiveni, topluluk mu birebir mi kararı, fiyat mantığı.
 - `sablonlar/teklif-tek-sayfa.md`, `garanti-sablonlari.md`, `bonus-yigini.md`, `fiyat-tablosu.md`, `miknatis-teklif.md`, `satis-gorusmesi.md`, `topluluk-lansman-plani.md`.
 - `ornekler/serbest-tasarimci-fiyat-kocu.md`: `icp-bulucu` örneğinin devamı.
+- `referans/uzman-vakalari.md`: SooWei, Elaine, Usman ve Stecko teklifi, fiyatı, görüşmeyi nasıl kuruyor (kaynaklı, kendi beyanları); kullanıcı “teklifim zayıf”, “fiyat”, “garanti” derse aç.
 - `kaynaklar.md`: okunan kaynaklar.
