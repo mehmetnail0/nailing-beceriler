@@ -25,3 +25,6 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 ## Bilinmesi gerekenler
 - AIDA ve PAS genel pazarlama bilgisidir; tek bir kaynağa dayanmaz.
 - Stefan Georgi'nin RMBC kursunun kendisi ücretlidir ve okunmadı; yalnız yukarıdaki açık kaynaklar kullanıldı.
+
+## Uzman anlatımları (altyazı dökümünden okundu)
+`referans/uzman-vakalari.md` içindeki Haynes, Batu Ulker, SooWei, Nik, Fazio, Moser, Elaine ve Hormozi satırlarının video kimliği ve dakikası dosyanın içinde; sözler altyazı dökümünden yeniden okundu, rakamlar konuşanların beyanı.

@@ -121,6 +121,7 @@ Bu beceri claude.ai gibi bir sohbet penceresinde, GitHub bağlantısından okunu
 ## Dosyalar
 
 - `referans/cerceveler.md`: Benson, Brunson, Hormozi, Georgi, AIDA/PAS ve bunların VSL'de nereye oturduğu.
+- `referans/uzman-vakalari.md`: Haynes, Batu, SooWei, Nik, Fazio ve Hormozi VSL'i nasıl sıralıyor, nerede eliyor, fiyatı söylüyor mu (kaynaklı, kendi beyanları); kullanıcı “kimi elerim”, “fiyat videoda mı”, “kaç dakika”, “itirazlar nereden” derse aç.
 - `referans/sayfa-yapisi.md`: videonun durduğu görüşme sayfası; sıra, 1-2 adım gösterimi, zenginleştirilmiş form soruları, görünüm.
 - `sablonlar/kisa-vsl.md`, `sablonlar/uzun-vsl.md`: doldurulabilir iskeletler.
 - `sablonlar/acilis-kancalari.md`: açılış tipleri.
