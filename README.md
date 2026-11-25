@@ -17,6 +17,14 @@
 
 Sıra önerisi: önce `icp-bulucu`, sonra `teklif-kurucu`, sonra `vsl-yazici`. Her biri bir öncekinin dosyasını okur, yoksa sorar.
 
+Bir şey yazarak başlasan da olur (“ben şu alanda uzmanım, nasıl bir teklif kurayım?”). Beceriler yazdıklarını “bilinen / tahmin / eksik” diye ayırır, yalnız eksik soruları sorar; sırf yazdın diye adımları atlamaz. Şirkete satış (B2B), işvereni olan uzmanlar ve kendi VSL'ini yapıştıranlar için ayrı bölümleri var.
+
+## Kılavuzlar
+
+| Kılavuz | Ne için |
+|---|---|
+| [`kilavuzlar/e-kitap-yazarken.md`](kilavuzlar/e-kitap-yazarken.md) | E-kitap yazarken dikkat edilecekler: yapı, kanıt, alıntı ve telif, Türkçe yazım, komut kutuları, ekran görüntüsünde kişisel bilgi, yayın öncesi liste. |
+
 ## Kurulum
 
 ```bash

@@ -24,9 +24,42 @@ Sonra `/mcp` ile Octi hesabına giriş yapılır. Kullanıcının nişinde başa
 
 Bulduğun kalıpları kopyalama; kartı kullanıcının kendi cevaplarıyla kur, dışarıdan gelen kelimeleri “kitlede duyulan” diye ayrı işaretle.
 
+## Kullanıcı zaten çok yazdıysa (atlama yok)
+
+İlk mesajında kim olduğunu, uzmanlığını, hatta hedef kitleyi anlatan biri de olur (“ben X alanında uzmanım, şunları yaptım, nasıl bir marka kurayım?”). Bu, ICP'nin bittiği anlamına gelmez; çoğu zaman uzmanlığı anlatır, müşteriyi anlatmaz. Şöyle yap:
+
+1. Yazdıklarını üç sütunda ayır: **bilinen** (kullanıcının söylediği), **tahmin** (senin çıkarımın), **eksik** (kimin için, neden şimdi, ne ödüyor, nerede bulunur).
+2. Üç satırlık özet ver ve “Doğru mu?” diye sor.
+3. Yalnız **eksik** kalanları, tek tek sor. Cevaplanmış soruyu tekrar sorma, ama kart, aç kalabalık testi ve doğrulama planı yine yapılır.
+4. Uzun brief'i ya da “derin araştır” isteğini bahane edip soruları geçip doğrudan plan yazma. Araştırma sorunun yerine geçmez; kullanıcının kendi müşteri bilgisi (kim yazdı, kim ödedi) webden bulunamaz.
+5. Webden bulduğun pazar bilgisinin yanına kaynağı ya da `[doğrula]` yaz. Fiyat ve yasa iddiasını kanıtsız kesin söyleme.
+
+## Şirkete satış (B2B) ve uzmanlık işleri
+
+Alıcı bir şirketse (savunma, sağlık, hukuk, üretim, medya...) kart bir kişiyi değil bir alım ekibini anlatır. Karta şunları ekle:
+
+- **Kullanan, savunan, bütçe sahibi, karar veren, engelleyen:** kim kim? Çoğu zaman beşi ayrı kişidir.
+- **Alım tetikleyicisi:** fuar, ihale, ihracat hedefi, denetim, yeni dönem bütçesi. “Ne zaman ihtiyaç duyar” sorusu “kim” sorusundan önce gelir.
+- **Şu an kime ödüyorlar:** ajans, danışman, iç ekip, hiç kimse. Yerine geçeceğin şey bu.
+- **Satın alma yolu:** doğrudan mı, tedarikçi ya da ajans üzerinden mi? Büyük alıcıya ilk adımda ulaşılamıyorsa onlara satış yapan küçük tedarikçiler ayrı bir kitle olarak kartlanır.
+- **Kullanıcının kısıtları:** işvereni var mı, yazılı izin gerekir mi, para ödeyen firma hakkında içerik üretince çıkar çatışması doğar mı. Bunu en başta sor; çözüm planın parçası olur.
+- **Kanıt:** vaka çalışması ya da referansı yoksa “ilk 3 müşteri” için indirimli ama izinli vaka çalışması planı yaz.
+
+Alıcı bireyse bu bölümü atla.
+
+## Sohbet penceresinde (dosya ve MCP yok)
+
+Bu beceri claude.ai gibi bir sohbet penceresinde GitHub bağlantısından okunuyor olabilir. Alt dosyalar (`sablonlar/`, `referans/`) açılamazsa durma; soruları ve aşağıdaki asgari kartı SKILL.md'den kullan:
+
+> **Kart (asgari):** Kim (durum, tetikleyici) · Derdi (kendi kelimeleriyle, tırnakta) · İstediği · Önce ne denedi · İtirazı · Nerede bulunur · Bilinen / Tahmin etiketi.
+> **Aç kalabalık testi:** acısı büyük mü, ödeyecek parası var mı, kolay bulunur mu, büyüyor mu (her biri 1-5 ve tek cümle).
+> **Doğrulama:** 5-10 kişiye tek soruluk DM.
+
+Çıktıyı sohbette ver; dosya yazamıyorsan düzenlenebilir bir taslak belgeye koy.
+
 ## Akış
 
-1. **Soruları tek tek sor.** Her sorunun altına kısa bir iyi cevap örneği koy (`sablonlar/soru-bankasi.md`). Kullanıcı “bilmiyorum” derse bir sonraki soruya geç, sonra dön.
+1. **Soruları tek tek sor.** Her sorunun altına kısa bir iyi cevap örneği koy (`sablonlar/soru-bankasi.md`). Kullanıcı “bilmiyorum” derse bir sonraki soruya geç, sonra dön. Kullanıcı zaten anlattığı bir soruyu atlamak istersen yukarıdaki “atlama yok” bölümüne göre yap.
 2. **Ara özet.** 6. sorudan sonra duyduklarını 3 satırda söyle: “Şu ana kadar duyduğum kişi şu. Doğru mu?”
 3. **Kartı yaz** (`sablonlar/icp-karti.md`).
 4. **Aç kalabalık testi** (`sablonlar/ac-kalabalik-testi.md`): dört ölçüt, her biri 1-5 puan ve tek cümle gerekçe.

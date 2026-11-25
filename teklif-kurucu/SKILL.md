@@ -24,10 +24,34 @@ Sonra `/mcp` ile Octi hesabına giriş yapılır. Kullanıcının beğendiği ü
 
 Gördüğün teklifleri kopyalama. Yapıyı ödünç al, içeriği kullanıcının müşterisinin sorunlarından kur.
 
+## Kullanıcı bir uzmanlık ya da bir geçmiş yazdıysa
+
+Çoğu kullanıcı “ben X konusunda uzmanım, bana bir teklif kur” diye başlar; ne sattığını değil neyi bildiğini anlatır. Bu bir teklif değildir, bir hammaddedir. Şöyle yap:
+
+1. Uzmanlığı **satılabilir bir sonuca** çevir: “Şunu bilirim” yerine “şu kişi, şu sürede, şu sonuca varır.” Çeviremiyorsan bunu sor, uydurma.
+2. Yazılanı ayır: **bilinen**, **tahmin**, **eksik**. Cevaplanmış soruyu tekrar sorma; eksik kalan 2-3 şeyi (kime, hangi sonuç, ne kadar zaman ayırabilir) tek tek sor.
+3. “Derin araştır” ya da “ufak başlayalım” denmesi soruları geçmek için sebep değildir. Önce yalnız ilk satılacak paketi netleştir; geri kalan merdiven ikinci adımdır.
+4. Webden aldığın fiyat ve pazar bilgisine kaynak ya da `[doğrula]` yaz. Fiyat önerisi “açılış teklifi, ilk görüşmelerde denenecek” diye işaretlenir, piyasa fiyatı gibi sunulmaz.
+
+## Alıcı bir şirketse (B2B) ve satıcının bir işvereni varsa
+
+- **Hızlı nakit** (hafta içinde başlar, takipçi gerekmez) ile **uzun vade** (ürün, abonelik, sponsorluk) ayrı iki liste olur; her birine fiyat, teslim süresi ve ilk müşteri yolu yaz.
+- **Büyük alıcıya doğrudan satılmaz.** Önce onlara hizmet veren küçük tedarikçiler ve ajanslar, sonra referansla büyük alıcı. Merdiven bu sırayla kurulur.
+- **İlk 3 müşteri teklifi:** indirimli, 7 gün gibi kısa teslimli, karşılığında izinli vaka çalışması. Gerçek referansı olmayan kullanıcı için en çabuk kanıt yolu budur.
+- **İşveren ve çıkar çatışması:** kullanıcının bir işvereni (medya kuruluşu, kurum) varsa ek iş için yazılı izin gerekir; para ödeyen firma hakkında yayın yapılacaksa bu açıkça etiketlenir ya da yapılmaz. Bunu teklifin ilk sayfasına “koşullar” olarak yaz, sonraya bırakma.
+- **Yasal ve ödeme engelleri** (reklam etiketi, ödeme altyapısının ülkede çalışıp çalışmadığı) kontrol edilmeden “bültenini şuradan sat” deme. Emin değilsen `[doğrula]` yaz.
+- Sağlık ve para sonucu gibi, hukuki ya da güvenlik etkisi olan konularda sonuç vaat edilmez; hizmetin kendisi (analiz, rapor, görüşme) satılır.
+
+## Sohbet penceresinde (dosya ve MCP yok)
+
+Bu beceri claude.ai gibi bir sohbet penceresinde GitHub bağlantısından okunuyor olabilir. Alt dosyalar açılamazsa durma; aşağıdaki asgari yapıyla devam et ve çıktıyı düzenlenebilir bir taslak belgeye koy:
+
+> **Asgari teklif:** Kime · Sonuç (kendi kelimeleriyle) · Engeller ve her birine çözüm · Ne teslim edilir, ne sürede · Fiyat (gerekçeli) · Garanti (gerçekten verilebilen) · İlk 3 müşteri yolu · Merdivenin sonraki basamağı.
+
 ## Akış
 
-1. **ICP var mı?** `icp-bulucu` kartı varsa onu kullan. Yoksa 1-4. soruları sor, gerekirse önce `icp-bulucu`'yu öner.
-2. **Soruları tek tek sor**, her birinin altında iyi cevap örneğiyle.
+1. **ICP var mı?** `icp-bulucu` kartı varsa onu kullan. Yoksa 1-4. soruları sor, gerekirse önce `icp-bulucu`'yu öner. Kullanıcı uzun bir brief yazdıysa bile ICP boşlukları (kim ödüyor, neden şimdi, nerede bulunur) kapanmadan fiyat yazma.
+2. **Soruları tek tek sor**, her birinin altında iyi cevap örneğiyle. Brief'te cevabı olan soruyu atla ve “şunu şöyle anladım” diye göster; cevabı olmayanı sor.
 3. **Pazar kontrolü:** Acı, satın alma gücü, kolay bulunurluk, büyüme. Zayıf halka varsa açıkça söyle (`referans/cerceveler.md`).
 4. **Çekirdek teklifi kur** (`referans/cerceveler.md`, Grand Slam adımları): hayal edilen sonuç, engeller listesi, her engele çözüm, nasıl teslim edileceği, kırp ve yığ.
 5. **Güçlendir:** garanti, bonus, kıtlık ve aciliyet, isim (`sablonlar/`).
