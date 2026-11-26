@@ -143,3 +143,84 @@ def test_yerlesim_safe_area_comes_from_the_edit():
     L = {'kind': 'text', 't': 0, 'e': 1, 'x': 0.5, 'y': 0.08, 'text': {'font': 'Inter.ttf', 'size': 60, 'text': 'Adım 1'}}
     assert y.check({'layers': [dict(L)]}, fonts)[1]                                   # default: the top label sits under the app bar
     assert y.check({'safe': [0.05, 0.05, 0.9, 0.86], 'layers': [dict(L)]}, fonts)[1] == []   # the refs measured it there
+
+
+def test_yerlesim_title_lines_move_as_one_block():
+    """a two-line title under the app bar moves down together, the lines never stack on each other."""
+    y = load(VS[0], 'yerlesim'); fonts = os.path.join(ROOT, VS[0], 'fonts')
+    T = lambda yy, txt, sz: {'kind': 'text', 't': 0, 'e': 3, 'x': 0.5, 'y': yy, 'text': {'font': 'Inter.ttf', 'size': sz, 'text': txt}}
+    E = {'layers': [T(0.045, 'Wikipedia', 90), T(0.1, 'özgür ansiklopedi', 110)]}
+    assert y.ink_box(E['layers'][1], fonts)[1] > y.ink_box(E['layers'][0], fonts)[3]
+    fixed, left, _ = y.check(E, fonts, fix=True)
+    assert fixed and left == []
+    a, b = (y.ink_box(L, fonts) for L in E['layers'])
+    assert b[1] > a[3] and not y.inter(a, b)                                   # still two lines, one under the other
+    assert y.check(E, fonts)[1] == []
+
+
+def test_yerlesim_counts_the_pop_in():
+    """a big word that pops in at 1.18x is checked at its biggest, so it is not cut by the frame edge at the peak."""
+    y = load(VS[0], 'yerlesim'); fonts = os.path.join(ROOT, VS[0], 'fonts')
+    L = {'kind': 'text', 't': 0, 'e': 2, 'x': 0.5, 'y': 0.4, 'in': {'d': 0.25, 'scale': 1.18}, 'text': {'font': 'Inter.ttf', 'size': 145, 'text': '60 MİLYON'}}
+    E = {'layers': [L]}
+    y.check(E, fonts, fix=True)
+    b = y.layer_box(L, fonts)
+    assert b[0] >= 70 - 0.5 and b[2] <= 940 + 0.5
+
+
+def test_yerlesim_names_overlapping_text():
+    y = load(VS[0], 'yerlesim'); fonts = os.path.join(ROOT, VS[0], 'fonts')
+    T = lambda yy, txt: {'kind': 'text', 't': 0, 'e': 3, 'x': 0.5, 'y': yy, 'move': [{'t': 0, 'd': 1, 'dx': 0}], 'text': {'font': 'Inter.ttf', 'size': 90, 'text': txt}}
+    assert any(l.startswith('overlap:') for l in y.check({'layers': [T(0.4, 'bir'), T(0.42, 'iki')]}, fonts)[1])
+
+
+def test_noface_spans_and_check_edit_refuses_a_take_through_one(tmp_path):
+    """frames with no face (a title card in the clip) become source spans; check_edit names a take that runs through one."""
+    tl = load(VS[0], 'timeline')
+    f = [[1, 1, 1, 1]] * 60 + [[]] * 30 + [[1, 1, 1, 1]] * 60 + [[]] * 3 + [[1, 1, 1, 1]] * 10
+    (tmp_path / 'face.json').write_text(json.dumps({'fps': 30, 'f': f}))
+    assert tl.noface(str(tmp_path / 'face.json')) == [(2.0, 3.0)]          # a 0.1 s blink is not a card
+    import subprocess
+    w = tmp_path / 'work'; w.mkdir()
+    (w / 'face.json').write_text(json.dumps({'fps': 30, 'f': f}))
+    for n in ('mezz.mp4', 'a48.wav', 'look.cube'): (w / n).write_bytes(b'x')
+    E = {'mezz': 'work/mezz.mp4', 'audio': 'work/a48.wav', 'lut': 'work/look.cube', 'fps': 30, 'style': {}, 'caption': {'y': 0.7},
+         'segments': [{'in': 0.5, 'out': 4.5}], 'captions': [], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}]}
+    (w / 'edit.json').write_text(json.dumps(E))
+    r = subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'check_edit.py'), 'work/edit.json'], cwd=tmp_path, capture_output=True, text=True)
+    assert 'no speaker' in r.stdout, r.stdout + r.stderr
+    E['segments'] = [{'in': 0.5, 'out': 1.9}, {'in': 3.1, 'out': 4.5}]; (w / 'edit.json').write_text(json.dumps(E))
+    r = subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'check_edit.py'), 'work/edit.json'], cwd=tmp_path, capture_output=True, text=True)
+    assert 'no speaker' not in r.stdout, r.stdout
+
+
+def test_check_edit_caption_zone_follows_the_edit_safe_area(tmp_path):
+    import subprocess
+    w = tmp_path / 'work'; w.mkdir()
+    for n in ('mezz.mp4', 'a48.wav', 'look.cube'): (w / n).write_bytes(b'x')
+    E = {'mezz': 'work/mezz.mp4', 'audio': 'work/a48.wav', 'lut': 'work/look.cube', 'fps': 30, 'style': {}, 'caption': {'y': 0.875},
+         'segments': [{'in': 0.5, 'out': 4.5}], 'captions': [], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}]}
+    run = lambda: subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'check_edit.py'), 'work/edit.json'], cwd=tmp_path, capture_output=True, text=True).stdout
+    (w / 'edit.json').write_text(json.dumps(E)); assert 'caption y=0.875' in run()
+    E['safe'] = [0.05, 0.1, 0.9, 0.9]; (w / 'edit.json').write_text(json.dumps(E)); assert 'caption y=' not in run()
+
+
+def test_decide_skeleton_stops_empty_then_writes_an_edit(tmp_path):
+    """the decide.py skeleton carries no look: empty it names what to fill; filled it writes an edit.json the check reads."""
+    import shutil, subprocess
+    run = tmp_path / 'kurgu-1'; (run / 'work').mkdir(parents=True)
+    shutil.copytree(os.path.join(ROOT, VS[0], 'scripts'), run / 'scripts')
+    shutil.copy(os.path.join(ROOT, VS[0], 'scripts', 'decide_iskelet.py'), run / 'work' / 'decide.py')
+    words = {'language': 'tr', 'segments': [{'words': [{'w': w, 's': 0.5 + i * 0.4, 'e': 0.8 + i * 0.4, 'p': 0.9} for i, w in enumerate('bu bir deneme cümlesi'.split())]}]}
+    (run / 'work' / 'words.json').write_text(json.dumps(words))
+    r = subprocess.run([sys.executable, 'work/decide.py'], cwd=run, capture_output=True, text=True)
+    assert r.returncode and 'TAKES' in r.stderr
+    d = (run / 'work' / 'decide.py').read_text()
+    for k, v in {'TAKES': '[(0.4, 2.2)]', 'WORDS_PER_PAGE': '2', 'CHARS_PER_PAGE': '20', 'CAPTION': "{'y': 0.7}", 'STYLE': "{}",
+                 'CAMERA': "[{'t': 0, 'd': 0, 'to': 1.0}]", 'FOLLOW': '{}'}.items():
+        d = d.replace(f'{k} = REF', f'{k} = {v}', 1)
+    (run / 'work' / 'decide.py').write_text(d)
+    r = subprocess.run([sys.executable, 'work/decide.py'], cwd=run, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    E = json.load(open(run / 'work' / 'edit.json'))
+    assert E['segments'] and E['captions'] and E['captions'][0]['text'].startswith('bu')

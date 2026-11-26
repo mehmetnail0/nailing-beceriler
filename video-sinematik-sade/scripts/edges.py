@@ -73,7 +73,13 @@ QC = {round(v, 2) for d in fx['drop'] for v in d} | {round(p[1], 2) for p in fx[
 QC -= {round(v, 2) for v in fx['edges']}                  # edges the cut QC set by listening to the final mix: those stay
 
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from timeline import noface
+NF = noface(os.path.join(os.path.dirname(os.path.abspath(ej)), 'face.json'))
+
+
 def move(old, new, why):
+    if any(a + 0.02 < new < b - 0.02 for a, b in NF): return None     # never into a stretch with no speaker (a title card, a cutaway)
     if abs(new - old) < 0.5 / FPS or any(abs(old - v) <= 0.021 for v in QC): return None
     fx['edges'].append(round(new, 3))
     for d in fx['drop']:

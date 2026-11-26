@@ -5,7 +5,8 @@ usage: cutfix.py report.json edit.json words.json [cut_fixes.json]
   in_word / fragment  the take edge at that cut opens to the quietest point of the pause next to its word (the word is let
                       finish / starts whole): no word he says is lost. A fragment that is a whole short word in the source,
                       with room at the edge, is listed as checked.
-  false_start         the broken-off saying goes, cut at the quietest points of the pauses round it.
+  false_start         a broken-off piece (ends in "-"/"…" or 4 letters or fewer) goes, cut at the quietest points of the pauses round it;
+                      a whole word before its longer form (Turkish suffixes: “bir lisansla lisanslanmıştır”) is listed under "judge".
   repeat across a cut the earlier take ends before its saying (the last take wins).
   repeat in one take  the model's call, never a rule: Turkish doubles words on purpose (“adım adım”, “yavaş yavaş”) and also
                       stumbles (“müthiş… müthiş”; “tekrar tekrar” read as a stutter). It is listed under "judge";
@@ -49,7 +50,13 @@ def src_of(t):
     return None, None
 
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from timeline import noface
+NF = noface(os.path.join(os.path.dirname(os.path.abspath(ej)), 'face.json'))
+
+
 def move(old, new, why):
+    if any(a + 0.02 < new < b - 0.02 for a, b in NF): return False     # never into a stretch with no speaker (a title card, a cutaway)
     if abs(new - old) < 0.005: return False
     for d in fx['drop']:
         for j in (0, 1):
@@ -113,7 +120,9 @@ for it in R.get('issues', []):
         p = OW[i]; w = OW[i + 1] if len(it['words']) > 1 and i + 1 < len(OW) else None
         sp, kp = src_of(p['s']); sw_, kw = src_of(w['s']) if w else (None, None)
         if kp is None: unmapped.append(it); continue
-        f1 = min(SW, key=lambda x: abs(x['s'] - sp))
+        n_ = lambda x: re.sub(r'\W', '', x).casefold()
+        near_ = [x for x in SW if abs(x['s'] - sp) < 0.6 and n_(x['w']) == n_(p['w'])]      # the said word itself, not just the closest stamp
+        f1 = min(near_ or SW, key=lambda x: abs(x['s'] - sp))
         pv = [x for x in SW if x['e'] <= f1['s'] + 0.01 and x is not f1]
         a0 = quiet(pv[-1]['e'], f1['s']) if pv else f1['s'] - 0.03
         if w is not None and kw is not None and kw != kp:
@@ -123,7 +132,8 @@ for it in R.get('issues', []):
         span = [round(a0, 3), round(b0, 3)]
         if any(k0 - 0.05 <= f1['s'] <= k1 + 0.05 for k0, k1 in fx['keep']):
             checked.append(f'{kind} “{" ".join(it["words"])}” at {f1["s"]:.2f} s: kept, the model judged it meant'); continue
-        if kind == 'false_start' or (w is not None and len(re.sub(r'\W', '', p['w'])) < len(re.sub(r'\W', '', w['w'])) - 1):
+        cutoff = p['w'].rstrip().endswith(('-', '…', '...')) or len(n_(p['w'])) <= 4     # a broken-off piece; a whole word (“lisansla lisanslanmıştır”) is the model's call
+        if cutoff and (kind == 'false_start' or (w is not None and len(n_(p['w'])) < len(n_(w['w'])) - 1)):
             if span in fx['drop']: continue
             fx['drop'].append(span); changed.append(f'drop {a0:.2f}-{b0:.2f} s ({kind}: “{" ".join(it["words"])}”)'); continue
         ctx = ' '.join(x['w'] for x in SW if f1['s'] - 2.5 < x['s'] < f1['s'] + 3)

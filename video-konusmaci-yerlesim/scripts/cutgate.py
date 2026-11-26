@@ -18,6 +18,7 @@ GPU = bool(shutil.which('nvidia-smi')) and subprocess.run(['nvidia-smi', '-L'], 
 render = A.render or f'{sys.executable} {H}/render.py {A.edit} {A.video} --encoder ' + ('h264_nvenc' if GPU else 'libx264')
 py = lambda *a: subprocess.run([sys.executable, *a], capture_output=True, text=True)
 log = []
+FX = os.path.join(os.path.dirname(os.path.abspath(A.edit)), 'cut_fixes.json')
 nw = lambda i: {re.sub(r'\W', '', w).casefold() for w in i['words']} - {''}
 same = lambda i, j: abs(i['t'] - j['t']) < 0.6 and any(a.startswith(b) or b.startswith(a) for a in nw(i) for b in nw(j))
 for r in range(1, A.rounds + 1):
@@ -30,23 +31,30 @@ for r in range(1, A.rounds + 1):
     if not os.path.exists(f'{A.out}/r{r}/report.json'):
         sys.exit(f'kesim_qc.py wrote no report (exit {q.returncode}):\n' + (q.stderr or q.stdout)[-1500:])
     R = json.load(open(f'{A.out}/r{r}/report.json'))
+    fx_ = json.load(open(FX)) if os.path.exists(FX) else {}
+    def kept(i):        # the model listened (or read the sentence) and wrote this span in "keep": it is meant, never flagged again
+        for pc in pieces:
+            if pc['o'] - 1e-3 <= i['t'] < pc['o'] + pc['out'] - pc['in'] + 1e-3:
+                s_ = pc['in'] + i['t'] - pc['o']; return any(a - 0.05 <= s_ <= b + 0.05 for a, b in fx_.get('keep', []))
+        return False
+    R['issues'] = [i for i in R['issues'] if not kept(i)]
     log.append(dict(round=r, cuts=len(cuts), issues=R['issues']))
-    if q.returncode == 0 and not R['issues']: break
+    if not R['issues']: break
     back = [i for i in R['issues'] if len(log) > 1 and log[-2].get('rerendered') and any(same(i, j) for j in log[-2]['issues'])]
     if back:     # the engine moved this spot and the same words failed again: the source stamps are wrong here, so the model listens
         J = [dict(words=i['words'], out_t=i['t'], kind=i['kind'], wav=next((c['wav'] for c in R['cuts'] if abs(c['t'] - (i.get('cut') or i['t'])) < 0.05), ''),
                   why='same spot failed after an engine fix') for i in back]
         json.dump(J, open(f'{A.out}/judge.json', 'w'), ensure_ascii=False, indent=1)
-        print(json.dumps(dict(done=False, why='a spot the engine already fixed failed again: listen to the cut wav and the source, then set its edges '
-                              'in work/cut_fixes.json (drop / snap / keep) and run cutgate again', judge=J, log=log), ensure_ascii=False)); sys.exit(2)
+        print(json.dumps(dict(done=False, why='a spot the engine already fixed failed again: listen to the cut wav (or read the words round it: a whole, grammatical '
+                              'sentence is meant), then write its source span in work/cut_fixes.json "keep" (meant) or "drop" (a stumble), or move the take edge in decide.py, and run go again', judge=J, log=log), ensure_ascii=False)); sys.exit(2)
     f = py(f'{H}/cutfix.py', f'{A.out}/r{r}/report.json', A.edit, A.words)
     fr = json.loads(f.stdout); log[-1]['fix'] = fr
     if not fr['changed']:
         if fr['unmapped']: print(json.dumps(dict(done=False, why='issues the engine cannot place', log=log), ensure_ascii=False)); sys.exit(1)
         if fr['judge']:
             json.dump(fr['judge'], open(f'{A.out}/judge.json', 'w'), ensure_ascii=False, indent=1)
-            print(json.dumps(dict(done=False, why='the model judges each word said twice in one take: listen, then put its span in '
-                                  'work/cut_fixes.json "drop" (a stumble) or "keep" (meant), and run cutgate again', judge=fr['judge']), ensure_ascii=False)); sys.exit(2)
+            print(json.dumps(dict(done=False, why='the model judges each word said twice in one take: listen (or read "context": a whole, grammatical sentence is meant), then put '
+                                  'its span in work/cut_fixes.json "drop" (a stumble) or "keep" (meant), and run go again', judge=fr['judge']), ensure_ascii=False)); sys.exit(2)
         R['issues'] = []; log[-1]['all_checked'] = True; break
     for cmd in ([sys.executable, 'work/decide.py'], [sys.executable, f'{H}/check_edit.py', A.edit]):
         c = subprocess.run(cmd, capture_output=True, text=True)

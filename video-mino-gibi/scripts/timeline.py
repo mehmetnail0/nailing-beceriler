@@ -4,6 +4,7 @@
     tl.T(src_s, take_index) -> output seconds     tl.dur     tl.cuts     tl.seg_json() -> edit.json "segments"
     pages(tl, [(text, src_start, src_end, take_index), ...]) -> edit.json "captions" (touching pages swap on the same frame)
     words_between(words_json, a, b) -> [(word, start, end)] so you can group pages on the spoken words
+    noface() -> [(a, b), ...] source seconds where no face was found (a title card, a logo, a cutaway): keep takes out of them
 Holds no look values: every number in an edit comes from you, read from the references.
 Audio fixes from the cut QC (cutfix.py) live in work/cut_fixes.json and are applied here, so a re-run of decide.py picks them up untouched:
     {"drop": [[src_a, src_b], ...]  a repeat / false start removed from inside a take (the take keeps its index; T() maps across the hole),
@@ -104,3 +105,16 @@ def pages_from_words(tl, words_json, max_words, max_chars=28, fix=None, keys=Non
                 g = p[round(c * size):round((c + 1) * size)]
                 if g: items.append((' '.join(x[0] for x in g), g[0][1], g[-1][2], si))
     return pages(tl, items, keys)
+
+
+def noface(path=None, min_s=0.3):
+    """source stretches of min_s or more with no face in work/face.json (facetrack.py, one entry per mezz frame)."""
+    p = path or os.path.join(os.getcwd(), 'work', 'face.json')
+    if not os.path.exists(p): return []
+    F = json.load(open(p)); fps = F.get('fps', 30); out, a = [], None
+    for i, x in enumerate(F['f'] + [[1]]):
+        if not x and a is None: a = i
+        elif x and a is not None:
+            if (i - a) / fps >= min_s: out.append((round(a / fps, 3), round(i / fps, 3)))
+            a = None
+    return out

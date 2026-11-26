@@ -204,9 +204,12 @@ def font(name, size, weight=None):
                 nm = nm.decode() if isinstance(nm, bytes) else str(nm)
                 vals.append(weight if 'eight' in nm or nm == 'wght' else (min(max(size / 2, ax['minimum']), ax['maximum']) if 'ptical' in nm or nm == 'opsz' else ax['default']))
             f.set_variation_by_axes(vals)
-        except Exception as e:
-            print('font var', e, file=sys.stderr)
+        except Exception:
+            if name not in _NOVAR: _NOVAR.add(name); print(f'{name} has no weight axis (not a variable font): "weight" is ignored for it', file=sys.stderr)
     return f
+
+
+_NOVAR = set()
 
 
 def low(s):
@@ -582,7 +585,12 @@ def matte(frame, seg_i):
     if _ms is None:
         import onnxruntime as ort
         pv = [p for p in ('CUDAExecutionProvider', 'CPUExecutionProvider') if p in ort.get_available_providers()]
-        _ms = ort.InferenceSession(MAT['model'], providers=pv)
+        so = ort.SessionOptions()     # default ORT spins one thread per core and ignores nice/taskset: cap it to the cores this job may use
+        try: ncpu = len(os.sched_getaffinity(0))
+        except AttributeError: ncpu = os.cpu_count() or 4
+        so.intra_op_num_threads = max(1, min(int(os.environ.get('OMP_NUM_THREADS') or 8), ncpu)); so.inter_op_num_threads = 1
+        so.add_session_config_entry('session.intra_op.allow_spinning', '0')
+        _ms = ort.InferenceSession(MAT['model'], sess_options=so, providers=pv)
     if _mlast_seg != seg_i: _mhist = []; _mrec = None
     if 'r1i' in [i.name for i in _ms.get_inputs()]:
         z = np.zeros((1, 1, 1, 1), np.float32); r = _mrec or {f'r{i}i': z for i in (1, 2, 3, 4)}

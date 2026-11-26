@@ -66,13 +66,17 @@ prep() {
   python3 - "$W" "$BEST" <<'PY'
 import json, os, sys
 W, dur = sys.argv[1], sys.argv[2]
+sys.path.insert(0, os.path.join(os.path.dirname(W), 'scripts')); from timeline import noface
+NF = noface(os.path.join(W, 'face.json'))
 lines = [f"[{g['start']:.2f}-{g['end']:.2f}] {g['text'].strip()}" for g in json.load(open(os.path.join(W, 'words.json')))['segments']]
 sil = json.load(open(os.path.join(W, 'sil.json')))['silences']
 mat = sorted(os.listdir(os.path.join(W, 'malzeme')))
 ask = open(os.path.join(W, 'ask.txt')).read().strip()
 b = [f'# Brief', f'Ask: {ask or "(none: a finished reel in this style from the clip)"}', f'Clip: {dur} s, prepared as work/mezz.mp4 (1440x2560) + work/a48.wav; look: work/src.jpg',
      'Material given (work/malzeme/): ' + (', '.join(mat) if mat else 'none'),
-     f'Pauses (work/sil.json): {len(sil)}; cut inside them. Face track: work/face.json. Word times: work/words.json.', '', '## What was said (source seconds)'] + lines
+     f'Pauses (work/sil.json): {len(sil)}; cut inside them. Face track: work/face.json. Word times: work/words.json.',
+     'No speaker in the picture (source seconds; a title card, a logo, a cutaway: no take starts, ends or runs through one, check_edit refuses it): '
+     + (', '.join(f'{a:.2f}-{b:.2f}' for a, b in NF) or 'none'), '', '## What was said (source seconds)'] + lines
 open(os.path.join(W, 'brief.md'), 'w').write('\n'.join(b) + '\n')
 PY
   cat > "$W/model_prompt.md" <<PR
@@ -121,6 +125,7 @@ go() {
 }
 
 quick() {
+  [ -s "$W/edit.last.json" ] && [ -s "$W/final.mp4" ] || { echo "$(date +%T) quick: no finished render yet, running go" >> "$LOG"; go; return; }
   local T0=$(now) t TAG=q$(date +%H%M%S); rm -f "$W/DONE" "$W/FAILED"; cd "$RUN"
   fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; exit 1; }
   [ work/decide.py -nt work/edit.json ] && { python3 work/decide.py > "$W/decide.txt" 2>&1 || fail "decide.py failed: $(tail -n 3 "$W/decide.txt")"; }
