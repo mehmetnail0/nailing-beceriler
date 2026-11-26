@@ -1,6 +1,6 @@
 # Hormozi kitapları: bölüm ve sayfa atıflı özet
 
-Satın alınmış üç kitabın yerel kopyasından okundu (kopya repoda yok, yalnız Nail'in Mac'inde). Hepsi kendi cümlelerimizle özet. Kitap e-kitap dökümü olduğu için basılı sayfa numarası yok; “PDF s.” yerel PDF'in sayfa sırasıdır, bölüm adı kitabın içindekiler listesindendir. Hormozi'nin rakam ve vaka beyanları doğrulanmadı.
+Satın alınmış üç kitabın yerel kopyasından okundu (kopya pakette yok). Hepsi kendi cümlelerimizle özet. Kitap e-kitap dökümü olduğu için basılı sayfa numarası yok; “PDF s.” yerel PDF'in sayfa sırasıdır, bölüm adı kitabın içindekiler listesindendir. Hormozi'nin rakam ve vaka beyanları doğrulanmadı.
 
 ## (a) $100M Offers
 

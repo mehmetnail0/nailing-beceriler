@@ -16,7 +16,7 @@ Kural: hepsi kendi anlatımları; rakamlar bağımsız doğrulanmadı. “Şunu 
 | Fiyat | En çok müşteri için değil, en çok kazanç için fiyatla; alt teklifleri (ucuz ürün, downsell) sevmiyor | 3lS3rUmYUdI 01:31 |
 | Parası olana hayır | Premium konumda hayır demek, daha az teslim yükü ve daha iyi müşteri getiriyor | 3lS3rUmYUdI 00:00 |
 | VSL'de aralık | Fiyatı söylemiyor ama videoda “beş haneli yatırım” diye açıkça söylüyor | LeWICN6lliE 06:10 |
-| Ödemeden önce ücretsiz kaynak | Hazır olmayanı geri çevirirken sayfada “hazır değilsin ama yardımcı kaynak yollarız” diyor (funnel sayfası, ekran görüntüsünden) | `handoffs/donusum-1110/I1/goh-ref/notready-01.jpg` |
+| Ödemeden önce ücretsiz kaynak | Hazır olmayanı geri çevirirken sayfada “hazır değilsin ama yardımcı kaynak yollarız” diyor | herkese açık başvuru sayfası (kendi gözlemimiz) |
 | Eylem listesi | Haftalık rapor ve eylem maddeleri müşterinin sayfasında görünür, hatırlatma var | 3lS3rUmYUdI 09:11 |
 
 Bizim kullanımımız: ilk iki satır en çok uzman müşterilerde işe yarar. “Hâlâ yapıyor” kanıtı yoksa sorulur; uydurulmaz.
@@ -38,7 +38,7 @@ Bizim kullanımımız: haftalık kilometre taşı fikri, bizim 8 işlik takvimim
 
 ## Stecko (Gerry Stecko, Growth Capital; kendi herkese açık sayfaları)
 
-Kaynak: `handoffs/donusum-1110/steckogb-whop-1120.md`. Fiyat ve sayılar bağımsız doğrulanmadı.
+Kaynak: herkese açık profil ve randevu sayfası gözlemimiz (20 Kasım 2026). Fiyat ve sayılar bağımsız doğrulanmadı.
 
 - **Paket:** 6 ayda 6 faz (arka uç, profil, dönüşüm, ölçekleme, kanal çoğaltma, tam ölçek), birebir görüşme, “yerine yapma” ekip yerleştirme, ekip erişimi, topluluk.
 - **Kanıt ayrımı:** müşterinin kendi satış ekran görüntüleri “kohortun sonuçları” diye etiketli; kendi komisyon kanıtı gibi gösterilmiyor.

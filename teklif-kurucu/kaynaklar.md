@@ -20,7 +20,7 @@ Bu beceri yazılırken açılıp okunan kaynaklar. Hepsi kendi cümlelerimizle �
 - https://www.youtube.com/watch?v=LqC-oXjatmA — Alex Hormozi, iyi pazarın dört ölçütü.
 
 ## Hormozi kitapları (yerel kopya)
-- $100M Offers, $100M Money Models, $100M Leads: satın alınmış kitaplar, yalnız Nail'in Mac'inde; özet ve atıflar `referans/hormozi-kitaplari.md` içinde.
+- $100M Offers, $100M Money Models, $100M Leads: satın alınmış kitaplar, pakette yok; özet ve atıflar `referans/hormozi-kitaplari.md` içinde.
 
 ## Uzman vakaları
 - https://www.youtube.com/watch?v=wdnxr9kNu30 — SooWei Goh, birebir seans: “hâlâ işi yapan öğretmen” konumu, eleme dili.

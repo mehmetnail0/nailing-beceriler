@@ -35,6 +35,7 @@ GOOD = '---\nname: ok-skill\ndescription: does a thing\n---\n# x\n'
     ({'ok-skill/SKILL.md': GOOD + 'see /Users/someone/x\n'}, 'personal Mac path'),
     ({'ok-skill/SKILL.md': GOOD + 'copy to /root/box\n'}, 'server path'),
     ({'ok-skill/SKILL.md': GOOD + 'made for GZT\n'}, 'client name'),
+    ({'ok-skill/SKILL.md': GOOD + 'see `handoffs/x/notes.md`\n'}, 'internal notes path'),
     ({'ok-skill/SKILL.md': GOOD + 'the Tigno engine\n'}, 'internal product name'),
     ({'ok-skill/SKILL.md': GOOD, 'ok-skill/.env': 'A=1\n'}, '.env file'),
     ({'ok-skill/SKILL.md': GOOD + 'key sk-ant-abcdefghijklmnop1234\n'}, 'secret key'),

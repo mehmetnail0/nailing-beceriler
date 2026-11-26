@@ -27,7 +27,7 @@ Kural: bunlar beş kişinin kendi anlatımı. Rakamlar onların beyanı, bağım
 
 ## Stecko (Gerry Stecko, Growth Capital, uzmanlara organik içerikle yüksek bilet satış sistemi)
 
-Kaynak bu kütüphanedeki transkript değil; kendi herkese açık Instagram, X ve randevu sayfası gözlemimiz (`handoffs/donusum-1110/steckogb-whop-1120.md`, 20 Kasım 2026). Hiçbir sayı bağımsız doğrulanmadı.
+Kaynak bu kütüphanedeki transkript değil; kendi herkese açık Instagram, X ve randevu sayfası gözlemimiz (20 Kasım 2026). Hiçbir sayı bağımsız doğrulanmadı.
 
 1. **Kapıda “yatırım yapabilir misin” ve “bağlılık” sorusu.** Randevu kartı gelire ek olarak iki alan daha soruyor: beş haneli yatırım yapabilirim mi ve bağlılık (iClosed kartı, steckogb-whop-1120.md). Bizim kullanımımız: forma “bu iki ay için ayıracağın zaman ve bütçe” sorusu eklemek hâlâ bir seçenek; karar kurucunun.
 2. **ICP bir cümlede.** Biyografisinde: “info-coaches come to me when they're stuck”. Yani ICP: takılmış bilgi koçları. Kanıtı “kohortun sonuçları” diye ayrı etiketleniyor, kendi satışı gibi gösterilmiyor.

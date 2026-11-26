@@ -12,7 +12,7 @@ PAID_FONTS = re.compile(r'din[\s_-]?pro|dinpro|realhead|alameda', re.I)
 NAMES = [(re.compile(p, f), why) for p, f, why in [
     (r'\bGZT\b', re.I, 'client name'), (r'\bRana\b', 0, 'client presenter name'), (r'Çayır', 0, 'client presenter name'),
     (r'Sare\s+Aydın', 0, 'client presenter name'), (r'\bTigno\b', re.I, 'internal product name'), (r'gzt-kit', re.I, 'internal path'),
-    (r'/Users/', 0, 'a personal Mac path'), (r'/root/', 0, 'a server path'), (r'~/Works\b', 0, 'internal folder'), (r'/lanes/', 0, 'internal box path'),
+    (r'/Users/', 0, 'a personal Mac path'), (r'/root/', 0, 'a server path'), (r'~/Works\b', 0, 'internal folder'), (r'/lanes/', 0, 'internal box path'), (r'\bhandoffs/', 0, 'internal notes path'),
     (r'backblazeb2|b2://|s3://|\bb2_bucket', re.I, 'storage bucket'), (r'185\.226\.\d+\.\d+', 0, 'server address')]]
 KEYS = [re.compile(p) for p in [r'sk-ant-[A-Za-z0-9_\-]{10,}', r'\bsk-[A-Za-z0-9]{32,}', r'AKIA[0-9A-Z]{16}', r'\bghp_[A-Za-z0-9]{30,}',
                                 r'\bxox[abps]-[A-Za-z0-9-]{10,}', r'-----BEGIN [A-Z ]*PRIVATE KEY-----', r'\bnk_[A-Za-z0-9]{16,}',
