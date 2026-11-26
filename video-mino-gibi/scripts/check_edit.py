@@ -134,6 +134,9 @@ for n, o in enumerate(E.get('overlays', [])):
     if miss: bad.append(f'overlay {n}: needs {", ".join(miss)}'); continue
     if not os.path.exists(path(o['file'])): bad.append(f'overlay {n}: file missing: {o["file"]}')
 if E.get('music') and not os.path.exists(path(E['music'].get('file', ''))): bad.append(f'music file missing: {E["music"].get("file")}')
+for n, x in enumerate(E.get('sfx', [])):
+    if not os.path.exists(path(x.get('file', ''))): bad.append(f'sfx {n}: file missing: {x.get("file")}')
+    if not 0 <= x.get('t', -1) < DUR: bad.append(f'sfx {n}: t {x.get("t")} is outside the {DUR} s video.')
 print(f'video length after cuts: {DUR} s, {len(caps)} captions, {len(cam)} camera keys, {len(E.get("inserts", []))} inserts')
 print('\n'.join(bad) if bad else 'ok')
 sys.exit(1 if bad else 0)

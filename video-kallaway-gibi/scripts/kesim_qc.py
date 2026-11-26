@@ -23,7 +23,7 @@ import argparse, json, os, re, subprocess, sys, unicodedata
 import numpy as np, soundfile as sf
 
 ap = argparse.ArgumentParser(); ap.add_argument('video'); ap.add_argument('--cuts', required=True)
-ap.add_argument('--lang', default='tr'); ap.add_argument('--out', default='kesim_qc'); ap.add_argument('--model', default='large-v3')
+ap.add_argument('--lang', default='tr'); ap.add_argument('--out', default='kesim_qc'); ap.add_argument('--model', default=None, help='default: large-v3 on an NVIDIA GPU, medium on a CPU (the model transcribe.py already downloaded)')
 ap.add_argument('--src', help='source wav of pieces with src==main: checks each piece lands in sync (av_drift)')
 ap.add_argument('--voice', help='voice-only render (before music/SFX): lists isolated short blobs (breath/hum candidates) with wavs')
 ap.add_argument('--margin', type=float, default=0.04); ap.add_argument('--frag', type=float, default=0.12)
@@ -41,8 +41,8 @@ cuts = load_cuts(A.cuts)
 a = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-i', A.video, '-ac', '1', '-ar', str(SR), '-f', 'f32le', '-'], capture_output=True, check=True).stdout, np.float32).copy()
 dur = len(a) / SR
 from faster_whisper import WhisperModel
-try: m = WhisperModel(A.model, device='cuda', compute_type='float16')
-except Exception: m = WhisperModel(A.model, device='cpu', compute_type='int8')
+try: m = WhisperModel(A.model or 'large-v3', device='cuda', compute_type='float16')
+except Exception: m = WhisperModel(A.model or 'medium', device='cpu', compute_type='int8', cpu_threads=int(os.environ.get('OMP_NUM_THREADS') or min(os.cpu_count() or 4, 8)))
 
 def words(x, lang, off=0.0):
     segs, info = m.transcribe(x, language=lang, word_timestamps=True, condition_on_previous_text=False, temperature=0, vad_filter=False)

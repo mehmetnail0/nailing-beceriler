@@ -9,10 +9,13 @@ import argparse, json, os, re, subprocess, sys
 
 H = os.path.dirname(os.path.abspath(__file__))
 ap = argparse.ArgumentParser(); ap.add_argument('video'); ap.add_argument('--edit', default='work/edit.json')
-ap.add_argument('--words', default='work/words.json'); ap.add_argument('--lang', default='tr'); ap.add_argument('--rounds', type=int, default=4)
+ap.add_argument('--words', default='work/words.json'); ap.add_argument('--lang', default=None, help='default: the language transcribe.py found in --words'); ap.add_argument('--rounds', type=int, default=4)
 ap.add_argument('--render', default=''); ap.add_argument('--out', default='work/cutqc')
 A = ap.parse_args(); os.makedirs(A.out, exist_ok=True)
-render = A.render or f'{sys.executable} {H}/render.py {A.edit} {A.video} --encoder h264_nvenc'
+if not A.lang: A.lang = (json.load(open(A.words)).get('language') if os.path.exists(A.words) else None) or 'tr'
+import shutil
+GPU = bool(shutil.which('nvidia-smi')) and subprocess.run(['nvidia-smi', '-L'], capture_output=True).returncode == 0
+render = A.render or f'{sys.executable} {H}/render.py {A.edit} {A.video} --encoder ' + ('h264_nvenc' if GPU else 'libx264')
 py = lambda *a: subprocess.run([sys.executable, *a], capture_output=True, text=True)
 log = []
 nw = lambda i: {re.sub(r'\W', '', w).casefold() for w in i['words']} - {''}

@@ -979,6 +979,13 @@ if mu:                                               # music: {file, db, start (
     else: af.append("[v2]anullsink;[mu]anull[md]")
     af.append("[v1][md]amix=inputs=2:duration=first:normalize=0[vo2]"); last = 'vo2'
 else: last = 'vo'
+fx_ = [x for x in E.get('sfx', []) if sl[0] - 0.01 <= x['t'] < sl[1]]   # sfx: [{t (output s), file, db (gain, about -12..-19 under the voice), lp (Hz low-pass), fade (s soft start)}]
+for k, x in enumerate(fx_):
+    ain += ['-i', x['file']]; n_ = len(ain) // 2 - 1; dl = int(round((x['t'] - sl[0]) * 1000))
+    af.append(f"[{n_}:a]aresample=48000,aformat=channel_layouts=mono,volume={x.get('db', -16)}dB" + (f",lowpass=f={x['lp']}" if x.get('lp') else '')
+              + f",afade=t=in:d={x.get('fade', 0.08)},adelay={dl}:all=1[s{k}]")
+if fx_:
+    af.append(f"[{last}]" + ''.join(f'[s{k}]' for k in range(len(fx_))) + f"amix=inputs={len(fx_) + 1}:duration=first:normalize=0[vsfx]"); last = 'vsfx'
 af.append(f"[{last}]loudnorm=I=-15.2:TP=-1.2:LRA=9[aout]")
 tmpa = a.out + '.a.wav'
 subprocess.run([FF, '-v', 'error', '-y'] + ain + ['-filter_complex', ';'.join(af), '-map', '[aout]', '-ar', '48000', tmpa], check=True)

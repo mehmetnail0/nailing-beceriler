@@ -29,7 +29,7 @@ if a.gpu:
     except Exception as e:
         print('GPU failed, CPU fallback:', str(e)[:200], flush=True); a.gpu = False
 if not a.gpu:
-    m = WhisperModel(a.model, device='cpu', compute_type='int8', cpu_threads=os.cpu_count() or 4); dev = f'cpu {a.model}'
+    m = WhisperModel(a.model, device='cpu', compute_type='int8', cpu_threads=int(os.environ.get('OMP_NUM_THREADS') or min(os.cpu_count() or 4, 8))); dev = f'cpu {a.model}'
     segs, info = m.transcribe(audio, **kw); segs = list(segs)
 res = {'device': dev, 'language': info.language, 'secs': round(time.time() - t0, 1), 'segments': [
     {'start': s.start, 'end': s.end, 'text': s.text.strip(),

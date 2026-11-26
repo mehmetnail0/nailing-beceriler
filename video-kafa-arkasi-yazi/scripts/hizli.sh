@@ -11,6 +11,7 @@
 # HIZLI_LANG, HIZLI_LOCK (a folder used as a mkdir lock around render + gate on a shared GPU box).
 set -u
 K=$(cd "$(dirname "$0")/.." && pwd); CMD=${1:?prep|go|quick|all}; RUN=${2:?run folder}; shift 2
+mkdir -p "$RUN" && RUN=$(cd "$RUN" && pwd)   # absolute: go and quick cd into it
 GPU=0; command -v nvidia-smi >/dev/null && nvidia-smi -L >/dev/null 2>&1 && GPU=1
 ENC=libx264; [ $GPU = 1 ] && ENC=h264_nvenc
 JOBS=${HIZLI_JOBS:-$(( $(nproc 2>/dev/null || sysctl -n hw.ncpu) / 12 ))}; [ "$JOBS" -lt 1 ] && JOBS=1; [ "$JOBS" -gt 12 ] && JOBS=12
@@ -75,8 +76,8 @@ b = [f'# Brief', f'Ask: {ask or "(none: a finished reel in this style from the c
 open(os.path.join(W, 'brief.md'), 'w').write('\n'.join(b) + '\n')
 PY
   cat > "$W/model_prompt.md" <<PR
-You are the editor for one reel in this skill's style. Read SKILL.md (the style's numbers and steps), example/decide.py with example/notes.md
-(a finished edit in this style: keep its structure), and work/brief.md (the user's ask, the material they gave, every line with source times).
+You are the editor for one reel in this skill's style. Read SKILL.md (the style's numbers and steps), the files in example/ when there is one
+(a finished edit in this style: keep its structure, not its choices), and work/brief.md (the user's ask, the material they gave, every line with source times).
 Look at work/src.jpg. Write work/decide.py for this clip and this ask: it writes work/edit.json. Use the material in work/malzeme/ where the ask
 or the story needs it; do not go looking for other material unless the ask asks for it. Run python3 work/decide.py, then
 python3 scripts/check_edit.py work/edit.json, and fix until it prints ok. Do not render. End with the single line DONE.
@@ -105,6 +106,7 @@ go() {
   fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; exit 1; }
   t=$(now); python3 work/decide.py > "$W/decide.txt" 2>&1 || fail "decide.py failed: $(tail -n 3 "$W/decide.txt")"; step decide $t
   edges
+  python3 scripts/yerlesim.py work/edit.json --fix > "$W/yerlesim.txt" 2>&1 || fail "placement: $(tail -n 4 "$W/yerlesim.txt")"
   [ -f work/look.cube ] || python3 scripts/lut.py work/look.cube $LUTA > /dev/null
   python3 scripts/check_edit.py work/edit.json > "$W/check.txt" 2>&1; tail -n 1 "$W/check.txt" | grep -q '^ok$' || fail "check: $(cat "$W/check.txt")"
   local R="python3 scripts/render.py work/edit.json work/out_$TAG.mp4 --encoder $ENC --jobs $JOBS"
@@ -123,6 +125,7 @@ quick() {
   fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; exit 1; }
   [ work/decide.py -nt work/edit.json ] && { python3 work/decide.py > "$W/decide.txt" 2>&1 || fail "decide.py failed: $(tail -n 3 "$W/decide.txt")"; }
   edges
+  python3 scripts/yerlesim.py work/edit.json --fix > "$W/yerlesim.txt" 2>&1 || fail "placement: $(tail -n 4 "$W/yerlesim.txt")"
   python3 scripts/check_edit.py work/edit.json > "$W/check.txt" 2>&1; tail -n 1 "$W/check.txt" | grep -q '^ok$' || fail "check: $(cat "$W/check.txt")"
   lock
   t=$(now); python3 scripts/render.py work/edit.json /dev/null --fit > "$W/fit.txt" 2>&1 || fail "fit: $(tail -n 3 "$W/fit.txt")"; step "fit (behind words, stills)" $t
