@@ -108,13 +108,15 @@ def pages_from_words(tl, words_json, max_words, max_chars=28, fix=None, keys=Non
 
 
 def noface(path=None, min_s=0.3):
-    """source stretches of min_s or more with no face in work/face.json (facetrack.py, one entry per mezz frame)."""
+    """source stretches with no speaker in work/face.json (facetrack.py, one entry per mezz frame): every faceless stretch of min_s or more,
+    and a shorter one when the picture jumps into or out of it (a flash frame, a card, a wipe)."""
     p = path or os.path.join(os.getcwd(), 'work', 'face.json')
     if not os.path.exists(p): return []
-    F = json.load(open(p)); fps = F.get('fps', 30); out, a = [], None
+    F = json.load(open(p)); fps = F.get('fps', 30); J = F.get('jumps', []); out, a = [], None
+    near = lambda i: any(abs(i - j) <= 2 for j in J)
     for i, x in enumerate(F['f'] + [[1]]):
         if not x and a is None: a = i
         elif x and a is not None:
-            if (i - a) / fps >= min_s: out.append((round(a / fps, 3), round(i / fps, 3)))
+            if (i - a) / fps >= min_s or near(a) or near(i): out.append((round(a / fps, 3), round(i / fps, 3)))
             a = None
     return out

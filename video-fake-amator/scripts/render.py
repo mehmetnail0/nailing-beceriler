@@ -120,7 +120,7 @@ def cam_at(t):
 
 
 # ---------- face-following crop (optional) ----------
-# follow: {face, sigma, size_sigma, base, max, io_ref, size_k, eye_y, follow_x, hair_k, head_margin}
+# follow: {face, sigma, size_sigma, base, max, io_ref, size_k, eye_y, follow_x, hair_k, head_margin, room_top}  (minimal: {face: 'work/face.json'})
 # face = facetrack.py output (per source frame: eye-centre x, y, inter-ocular distance, face box). The crop keeps the eyes at eye_y,
 # the face size near io_ref (default: the clip's median) across takes (so a joint does not jump in size) and the hair top inside the frame.
 FOL = E.get('follow')
@@ -157,10 +157,11 @@ def view(seg, n, t):
     fx_ = SW / 2 + (ex - SW / 2) * FOL.get('follow_x', 1.0)
     hair = by - FOL.get('hair_k', 0.35) * bh
     x0 = min(max(fx_ - ww / 2, 0), SW - ww)
-    y0 = min(max(min(ey - FOL.get('eye_y', 0.43) * wh, hair - FOL.get('head_margin', 0.035) * wh), 0), SH - wh)
+    ytop = -FOL.get('room_top', 0) * wh       # room_top: the crop may start this much (of the frame) above the clip, for a head shot too high
+    y0 = min(max(min(ey - FOL.get('eye_y', 0.43) * wh, hair - FOL.get('head_margin', 0.035) * wh), ytop), SH - wh)   # under a top panel
     if h < 0.999:
         x0 = h * x0 + (1 - h) * (cx * SW - ww / 2); y0 = h * y0 + (1 - h) * (cy * SH - wh / 2)
-        x0 = min(max(x0, 0), SW - ww); y0 = min(max(y0, 0), SH - wh)
+        x0 = min(max(x0, 0), SW - ww); y0 = min(max(y0, ytop), SH - wh)
     return x0, y0, ww
 
 
@@ -829,28 +830,129 @@ def draw_columns(frame, cl, t, n):
     return out
 
 
-def chin_y(n):
-    """lowest point of the face (output-frame fraction) at output frame n; None without a face track."""
+def face_span_y(n):
+    """(hair top, chin) of the face as output-frame fractions at output frame n; None without a face track."""
     if FSM is None: return None
     act = [s for s in segs if s['o'] <= n < s['o'] + s['len']] or [s for s in segs if s['s0'] <= n < s['s1']]
     if not act: return None
     sg = act[0]; x0, y0, ww = view(sg, n, n / FPS)
     sf = min(max(sg['fi'] + (n - sg['o']), 0), len(FSM) - 1)
     if HAS[sf] < 0.5: return None
-    return (FSM[sf][3] + FSM[sf][4] - y0) * (W / ww) / H
+    k = (W / ww) / H
+    return (FSM[sf][3] - (FOL or {}).get('hair_k', 0.35) * FSM[sf][4] - y0) * k, (FSM[sf][3] + FSM[sf][4] - y0) * k
 
 
-ON_FACE = []
-if E['caption'].get('below_face') is not None and FSM is not None:      # never on the face: each page sits under the chin's lowest point over its own span
+def head_box(n):
+    """the speaker's head (hair top to chin, cheek to cheek) as an output-pixel box at output frame n; None without a face."""
+    if FSM is None: return None
+    act = [s for s in segs if s['o'] <= n < s['o'] + s['len']] or [s for s in segs if s['s0'] <= n < s['s1']]
+    if not act: return None
+    sg = act[0]; x0, y0, ww = view(sg, n, n / FPS)
+    sf = min(max(sg['fi'] + (n - sg['o']), 0), len(FSM) - 1)
+    if HAS[sf] < 0.5: return None
+    k = W / ww; ex, io, top, hh = FSM[sf][0], FSM[sf][2], FSM[sf][3], FSM[sf][4]
+    return ((ex - 1.15 * io - x0) * k, (top - (FOL or {}).get('hair_k', 0.35) * hh - y0) * k, (ex + 1.15 * io - x0) * k, (top + hh - y0) * k)
+
+
+def chin_y(n):
+    """lowest point of the face (output-frame fraction) at output frame n; None without a face track."""
+    v = face_span_y(n)
+    return v and v[1]
+
+
+ON_FACE, CAPS_MOVED = [], []
+if E['caption'].get('below_face') is not None and FSM is not None:      # never on the face: each page sits under the chin over its own span,
+    SAFE_TOP = E.get('safe', {}).get('y0', 0.12) * H                     # or above the hair when the bottom of the frame has no room
     for c in caps:
         arr, x, y = render_caption(c)
-        ch = [chin_y(n) for n in range(int(c['t'] * FPS), max(int(c['t'] * FPS) + 1, int(c['e'] * FPS)))]
-        ch = max([v for v in ch if v is not None] or [0])
-        top = (ch + E['caption']['below_face']) * H
+        fs = [face_span_y(n) for n in range(int(c['t'] * FPS), max(int(c['t'] * FPS) + 1, int(c['e'] * FPS)))]
+        fs = [v for v in fs if v is not None]
+        if not fs: continue
+        top = (max(v[1] for v in fs) + E['caption']['below_face']) * H
         if y < top:
             lim = H * E['caption'].get('y_max', 0.86) - arr.shape[0]
-            if top > lim: ON_FACE.append(round(c['t'], 2))         # y_max holds the page up on the chin: named in the report, the edit must move it
-            CAP_CACHE[id(c)] = (arr, x, int(min(top, lim)))
+            if top <= lim: CAP_CACHE[id(c)] = (arr, x, int(top)); continue
+            above = (min(v[0] for v in fs) - E['caption']['below_face']) * H - arr.shape[0]
+            if above >= SAFE_TOP: CAP_CACHE[id(c)] = (arr, x, int(above)); CAPS_MOVED.append(round(c['t'], 2))
+            else: ON_FACE.append(round(c['t'], 2)); CAP_CACHE[id(c)] = (arr, x, int(lim))   # no room above or below: named in the report
+
+
+LAYERS_MOVED_OFF_FACE, LAYERS_ON_FACE = [], []
+if FSM is not None:      # a text layer in front of the speaker never sits on the head: it moves above the hair, else under the chin, inside the
+    SY0, SY1 = E.get('safe', {}).get('y0', 0.12) * H, E.get('safe', {}).get('y1', 0.86) * H     # free frame and clear of the captions;
+    def _cap_boxes(t0, t1):                                                                     # "on_face": true keeps one there on purpose
+        out = []
+        for c in caps:
+            if c['t'] < t1 and t0 < c['e']:
+                arr, x, y = render_caption(c); out.append((x, y, x + arr.shape[1], y + arr.shape[0]))
+        return out
+    hit = lambda a, b: a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
+    for li, L in enumerate(LAY):
+        if L.get('kind') != 'text' or L.get('behind') or L.get('track') or L.get('full') or L.get('on_face') or L.get('move'): continue
+        sp = layer_sprites(L)
+        if not sp: continue
+        ax, ay = L.get('x', 0.5) * W, L.get('y', 0.5) * H
+        bx = (min(ax + xo for _, xo, yo, _k in sp), min(ay + yo for _, xo, yo, _k in sp),
+              max(ax + xo + r.shape[1] for r, xo, yo, _k in sp), max(ay + yo + r.shape[0] for r, xo, yo, _k in sp))
+        hb = [head_box(n) for n in range(int(L['t'] * FPS), max(int(L['t'] * FPS) + 1, int(L['e'] * FPS)), 5)]
+        hb = [b for b in hb if b and hit(b, bx)]
+        if not hb: continue
+        u = (min(b[0] for b in hb), min(b[1] for b in hb), max(b[2] for b in hb), max(b[3] for b in hb)); hgt = bx[3] - bx[1]; gap = 0.015 * H
+        cb = _cap_boxes(L['t'], L['e'])
+        for dy in (u[1] - gap - bx[3], u[3] + gap - bx[1]):
+            nb = (bx[0], bx[1] + dy, bx[2], bx[3] + dy)
+            if SY0 <= nb[1] and nb[3] <= SY1 and not any(hit(nb, c) for c in cb):
+                L['y'] = round(L.get('y', 0.5) + dy / H, 4); LAYERS_MOVED_OFF_FACE.append(li); break
+        else: LAYERS_ON_FACE.append(li)
+
+
+def _rl(rgb):
+    """relative luminance (WCAG) of an array of 0..255 RGB values."""
+    v = rgb.astype(np.float32) / 255.0
+    v = np.where(v <= 0.04045, v / 12.92, ((v + 0.055) / 1.055) ** 2.4)
+    return v[..., 0] * 0.2126 + v[..., 1] * 0.7152 + v[..., 2] * 0.0722
+
+
+def _cr(a, b): return (max(a, b) + 0.05) / (min(a, b) + 0.05)
+
+
+def caption_contrast(arr, x, y, frame, tile=120):
+    """worst contrast (WCAG ratio) a caption page shows over this frame, tile by tile: the letters' core against their own edge, or that
+    edge against the picture right outside it (so a stroke or shadow counts). Large text reads from 3:1."""
+    h, w = arr.shape[:2]
+    X0, Y0, X1, Y1 = max(x, 0), max(y, 0), min(x + w, W), min(y + h, H)
+    if X1 <= X0 or Y1 <= Y0: return 99
+    sp = arr[Y0 - y:Y1 - y, X0 - x:X1 - x]; a = sp[..., 3:4].astype(np.float32) / 255
+    comp = frame[Y0:Y1, X0:X1].astype(np.float32) * (1 - a) + sp[..., :3].astype(np.float32) * a
+    L = _rl(comp); m = (sp[..., 3] > 128).astype(np.uint8)
+    core = cv2.erode(m, np.ones((5, 5), np.uint8)); edge = m - cv2.erode(m, np.ones((3, 3), np.uint8))
+    ring = cv2.dilate(m, np.ones((9, 9), np.uint8)) - m
+    worst = 99
+    for c0 in range(0, X1 - X0, tile):
+        sl = np.s_[:, c0:c0 + tile]
+        if core[sl].sum() < 40 or ring[sl].sum() < 40: continue
+        lc, le, lr = (float(np.median(L[sl][q[sl] > 0])) for q in (core, edge, ring))
+        worst = min(worst, max(_cr(lc, le), _cr(le, lr), _cr(lc, lr)))
+    return worst
+
+
+def with_halo(arr, light):
+    """the page with an outline + soft shadow round its letters (dark under light letters, light under dark ones)."""
+    r = max(3, int(arr.shape[0] / 40))
+    pad = np.pad(arr, ((r * 2, r * 2), (r * 2, r * 2), (0, 0)))
+    a = pad[..., 3]
+    halo = cv2.GaussianBlur(cv2.dilate(a, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1, 2 * r + 1))), (0, 0), r * 0.6)
+    out = np.zeros_like(pad); out[..., :3] = 20 if light else 240; out[..., 3] = (halo.astype(np.float32) * 0.92).astype(np.uint8)
+    fa = a[..., None].astype(np.float32) / 255; oa = out[..., 3:4].astype(np.float32) / 255
+    na = fa + oa * (1 - fa)
+    rgb = (pad[..., :3] * fa + out[..., :3] * oa * (1 - fa)) / np.maximum(na, 1e-6)
+    return np.dstack([rgb, na * 255]).clip(0, 255).astype(np.uint8), r * 2
+
+
+CAP_LEG = {}            # id(page) -> last check time; a page that reads below 3:1 gets a halo (a gate fixes before it refuses)
+CAPS_HALO = []
+
+
 n_out = 0; r0, r1 = int(round(sl[0] * FPS)), int(round(sl[1] * FPS))
 WARM = 12
 for n in range(0 if a.reuse_video else NF):
@@ -945,6 +1047,11 @@ for n in range(0 if a.reuse_video else NF):
     for c in caps:
         if not hide and c['t'] <= t < c['e']:
             arr, x, y = render_caption(c)
+            if cs.get('auto_contrast', True) and CAP_LEG.get(id(c), -9) <= t - 0.5:
+                CAP_LEG[id(c)] = t
+                if caption_contrast(arr, x, y, frame) < 3.0:
+                    lum = _rl(arr[..., :3][arr[..., 3] > 200]); arr2, d = with_halo(arr, float(np.median(lum)) > 0.35 if lum.size else True)
+                    CAP_CACHE[id(c)] = (arr2, x - d, y - d); arr, x, y = arr2, x - d, y - d; CAP_LEG[id(c)] = 1e9; CAPS_HALO.append(round(c['t'], 2))
             fade = cs.get('fade', 0)
             u = (t - c['t']) / fade if fade else 1
             al = ease({'bez': cs.get('bez', [0.25, 0.1, 0.25, 1])}, u) if fade else 1
@@ -1017,5 +1124,5 @@ venc = (['-c:v', 'h264_nvenc', '-preset', 'p6', '-tune', 'hq', '-rc', 'vbr', '-c
 vmap = ['-filter_complex', ';'.join(vf), '-map', f'[{cur}]'] + venc if vf else ['-map', '0:v', '-c:v', 'copy']
 subprocess.run([FF, '-v', 'error', '-y'] + vin + vmap + ['-map', '1:a', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', a.out], check=True)
 os.remove(tmpa)
-print(json.dumps({'out': a.out, 'caps_on_face': ON_FACE, 'frames': n_out, 'dur': round(n_out / FPS, 2), 'cuts': len(cut_times), 'cut_t': [round(c, 2) for c in cut_times],
+print(json.dumps({'out': a.out, 'caps_on_face': ON_FACE, 'caps_moved_above_face': CAPS_MOVED, 'caps_halo': CAPS_HALO, 'layers_moved_off_face': LAYERS_MOVED_OFF_FACE, 'layers_on_face': LAYERS_ON_FACE, 'frames': n_out, 'dur': round(n_out / FPS, 2), 'cuts': len(cut_times), 'cut_t': [round(c, 2) for c in cut_times],
                   'video_s': round(tv, 1), 'total_s': round(time.time() - T0, 1)}))

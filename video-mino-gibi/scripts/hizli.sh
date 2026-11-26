@@ -48,6 +48,7 @@ prep() {
   local KEY C; KEY=$( { stat -c %s "$CLIP" 2>/dev/null || stat -f %z "$CLIP"; head -c 4000000 "$CLIP"; tail -c 4000000 "$CLIP"; } | shasum | cut -c1-16)
   C=${HIZLI_CACHE:-$HOME/.cache/video-beceri}/$KEY; mkdir -p "$C"
   if [ -s "$C/face.json" ] && [ -s "$C/words.json" ]; then
+    grep -q '"jumps"' "$C/face.json" || python3 "$RUN/scripts/facetrack.py" "$C/mezz.mp4" "$RUN/models/yunet.onnx" "$C/face.json" > "$W/ft.log" 2>&1   # a track from an older version
     for x in mezz.mp4 a48.wav words.json sil.json face.json src.jpg; do ln -f "$C/$x" "$W/$x" 2>/dev/null || cp "$C/$x" "$W/$x"; done; step "media from cache" $T0
   else
     local t=$(now) FFE=libx264; [ $GPU = 1 ] && FFE=hevc_nvenc

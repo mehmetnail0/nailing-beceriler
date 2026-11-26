@@ -224,3 +224,68 @@ def test_decide_skeleton_stops_empty_then_writes_an_edit(tmp_path):
     assert r.returncode == 0, r.stderr
     E = json.load(open(run / 'work' / 'edit.json'))
     assert E['segments'] and E['captions'] and E['captions'][0]['text'].startswith('bu')
+
+
+def test_noface_counts_a_short_flash_where_the_picture_jumps(tmp_path):
+    tl = load(VS[0], 'timeline')
+    f = [[1, 1, 1, 1]] * 60 + [[]] * 3 + [[1, 1, 1, 1]] * 60
+    (tmp_path / 'face.json').write_text(json.dumps({'fps': 30, 'f': f, 'jumps': [60, 63]}))
+    assert tl.noface(str(tmp_path / 'face.json')) == [(2.0, 2.1)]       # a green flash frame, not a blink
+
+
+def _render(tmp_path, colour, caption, face=None, layers=()):
+    """a 1 s plain clip of one colour through render.py; returns the report and the middle frame (RGB)."""
+    import subprocess, numpy as np
+    w = tmp_path / 'work'; w.mkdir(exist_ok=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c={colour}:s=1440x2560:r=30:d=1', '-f', 'lavfi', '-i',
+                    'sine=f=220:d=1:sample_rate=48000', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-shortest', str(w / 'mezz.mp4')], check=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(w / 'mezz.mp4'), '-vn', '-ac', '1', '-ar', '48000', str(w / 'a48.wav')], check=True)
+    (w / 'look.cube').write_text('LUT_3D_SIZE 2\n' + ''.join(f'{r} {g} {b}\n' for b in (0, 1) for g in (0, 1) for r in (0, 1)))   # identity
+    E = {'mezz': 'work/mezz.mp4', 'audio': 'work/a48.wav', 'lut': 'work/look.cube', 'fps': 30, 'style': {}, 'fonts': os.path.join(ROOT, VS[0], 'fonts'),
+         'segments': [{'in': 0, 'out': 1}], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}], 'caption': caption,
+         'captions': [{'t': 0, 'e': 1, 'text': 'beyaz yazı'}], 'layers': list(layers)}
+    if face: (w / 'face.json').write_text(json.dumps(face)); E['caption']['face'] = 'work/face.json'
+    (w / 'edit.json').write_text(json.dumps(E))
+    r = subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'render.py'), 'work/edit.json', 'work/out.mp4'], cwd=tmp_path,
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    rep = json.loads([x for x in r.stdout.splitlines() if x.startswith('{')][-1])
+    fr = subprocess.run(['ffmpeg', '-v', 'error', '-ss', '0.5', '-i', str(w / 'out.mp4'), '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
+                        capture_output=True, check=True).stdout
+    return rep, np.frombuffer(fr, np.uint8).reshape(1920, 1080, 3)
+
+
+@pytest.mark.skipif(not __import__('shutil').which('ffmpeg') or not importlib.util.find_spec('cv2') or not importlib.util.find_spec('scipy'),
+                    reason='a render test needs ffmpeg and the skills\' own install (setup_check.py)')
+def test_render_gives_an_unreadable_caption_a_halo(tmp_path):
+    """white letters on a white picture: the render measures it and outlines the page by itself; on black it leaves it alone."""
+    cap = {'y': 0.7, 'size': 80, 'color': '#FFFFFF', 'stroke': [0, '#FFFFFF']}
+    rep, fr = _render(tmp_path, 'white', dict(cap))
+    assert rep['caps_halo'] == [0.0]
+    band = fr[int(0.64 * 1920):int(0.76 * 1920)]
+    assert band.min() < 80                                                   # something dark now edges the letters
+    rep, _ = _render(tmp_path, 'black', dict(cap))
+    assert rep['caps_halo'] == []
+
+
+@pytest.mark.skipif(not __import__('shutil').which('ffmpeg') or not importlib.util.find_spec('cv2') or not importlib.util.find_spec('scipy'),
+                    reason='a render test needs ffmpeg and the skills\' own install (setup_check.py)')
+def test_render_moves_a_caption_off_a_low_face(tmp_path):
+    """the face fills the bottom of the frame, so under the chin there is no room: the page goes above the hair instead."""
+    box = [720, 1800, 300, 300, 1400, 840, 1100, 0.9]             # eye centre, eye distance, face box x y w h (y 1400-2500 of a 2560 mezz)
+    face = {'w': 1440, 'h': 2560, 'fps': 30, 'f': [box] * 30}
+    rep, _ = _render(tmp_path, 'gray', {'y': 0.74, 'size': 70, 'below_face': 0.02, 'y_max': 0.86}, face)
+    assert rep['caps_moved_above_face'] == [0.0] and rep['caps_on_face'] == []
+
+
+@pytest.mark.skipif(not __import__('shutil').which('ffmpeg') or not importlib.util.find_spec('cv2') or not importlib.util.find_spec('scipy'),
+                    reason='a render test needs ffmpeg and the skills\' own install (setup_check.py)')
+def test_render_moves_a_title_off_the_head(tmp_path):
+    """a title set across the speaker's head moves above the hair by itself; one marked on_face stays where the edit put it."""
+    box = [720, 1350, 200, 300, 1000, 840, 900, 0.9]               # head from y 685 (hair) to 1900 of a 2560 mezz
+    face = {'w': 1440, 'h': 2560, 'fps': 30, 'f': [box] * 30}
+    title = {'kind': 'text', 't': 0, 'e': 1, 'x': 0.5, 'y': 0.45, 'text': {'text': 'BAŞLIK', 'font': 'Inter.ttf', 'size': 90}}
+    rep, _ = _render(tmp_path, 'gray', {'y': 0.8, 'size': 60}, face, [dict(title)])
+    assert rep['layers_moved_off_face'] == [0] and rep['layers_on_face'] == [], rep
+    rep, _ = _render(tmp_path, 'gray', {'y': 0.8, 'size': 60}, face, [dict(title, on_face=True)])
+    assert rep['layers_moved_off_face'] == []
