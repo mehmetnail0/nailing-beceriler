@@ -105,10 +105,14 @@ edges() {   # every take edge against the source voice: a retake's first word, a
   step "edges ($(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['changed'])" "$W/edges.txt") moved)" $t
 }
 
+fresh() {   # every go runs the engine of the skill it was started from: a run folder made by an older version gets the new scripts
+  [ "$K" -ef "$RUN" ] || [ ! -d "$RUN/scripts" ] || cp -R "$K/scripts/." "$RUN/scripts/"
+}
+
 go() {
   local LUTA=${1:---strength 0.75} T0=$(now) t TAG=h$(date +%H%M%S)
-  rm -f "$W/DONE" "$W/FAILED"; cd "$RUN"
-  fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; exit 1; }
+  rm -f "$W/DONE" "$W/FAILED"; fresh; cd "$RUN"
+  fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; python3 scripts/soyle.py "$W" > "$W/fixes.txt" 2>/dev/null; exit 1; }
   t=$(now); python3 work/decide.py > "$W/decide.txt" 2>&1 || fail "decide.py failed: $(tail -n 3 "$W/decide.txt")"; step decide $t
   edges
   python3 scripts/yerlesim.py work/edit.json --fix > "$W/yerlesim.txt" 2>&1 || fail "placement: $(tail -n 4 "$W/yerlesim.txt")"
@@ -123,12 +127,13 @@ go() {
   ffmpeg -nostats -hide_banner -i work/out_$TAG.mp4 -af ebur128=peak=true -f null - 2>&1 | grep -E "^\s+(I:|Peak:)" | tr -s ' ' > "$W/loud.txt"
   ln -f work/out_$TAG.mp4 work/final.mp4; cp work/edit.json work/edit.last.json; [ -f work/out_$TAG.video.mp4 ] && ln -f work/out_$TAG.video.mp4 work/final.video.mp4
   step "go total" $T0; echo "$W/final.mp4" > "$W/DONE"
+  python3 scripts/soyle.py "$W" | tee "$W/fixes.txt" | tee -a "$LOG"   # every change the engine made on its own
 }
 
 quick() {
   [ -s "$W/edit.last.json" ] && [ -s "$W/final.mp4" ] || { echo "$(date +%T) quick: no finished render yet, running go" >> "$LOG"; go; return; }
-  local T0=$(now) t TAG=q$(date +%H%M%S); rm -f "$W/DONE" "$W/FAILED"; cd "$RUN"
-  fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; exit 1; }
+  local T0=$(now) t TAG=q$(date +%H%M%S); rm -f "$W/DONE" "$W/FAILED"; fresh; cd "$RUN"
+  fail() { echo "$1" | tee -a "$LOG" > "$W/FAILED"; python3 scripts/soyle.py "$W" > "$W/fixes.txt" 2>/dev/null; exit 1; }
   [ work/decide.py -nt work/edit.json ] && { python3 work/decide.py > "$W/decide.txt" 2>&1 || fail "decide.py failed: $(tail -n 3 "$W/decide.txt")"; }
   edges
   python3 scripts/yerlesim.py work/edit.json --fix > "$W/yerlesim.txt" 2>&1 || fail "placement: $(tail -n 4 "$W/yerlesim.txt")"
@@ -143,6 +148,7 @@ quick() {
   fi
   ln -f work/out_$TAG.mp4 work/final.mp4; [ -f work/out_$TAG.video.mp4 ] && ln -f work/out_$TAG.video.mp4 work/final.video.mp4; cp work/edit.json work/edit.last.json
   step "quick total" $T0; echo "$W/final.mp4" > "$W/DONE"
+  python3 scripts/soyle.py "$W" | tee "$W/fixes.txt" | tee -a "$LOG"
 }
 
 bg() { mkdir -p "$W"; HIZLI_FG=1 setsid nohup bash "$0" "$@" > "$W/hizli.out" 2>&1 < /dev/null & echo "$!" > "$W/hizli.pid"; echo "running in the background: tail $LOG"; }

@@ -28,7 +28,7 @@ class TL:
             return v
         self.fps, self.segs, self.pieces, o = fps, [], [], 0
         for s in segs:
-            a, b = sn(s[0]), sn(s[1]); x = s[2] if len(s) > 2 else 0
+            a, b = max(0.0, sn(s[0])), sn(s[1]); x = s[2] if len(s) > 2 else 0     # a take never starts before the clip does
             cuts = sorted((max(a, d0), min(b, d1)) for d0, d1 in self.drops if d0 < b and d1 > a)
             parts, cur = [], a
             for d0, d1 in cuts:
@@ -82,6 +82,33 @@ def words_between(words_json, a, b):
             if min(w['e'], b) - max(w['s'], a) >= min(0.08, 0.6 * (w['e'] - w['s'])) or (w['s'] < a < w['e'] <= b and w['e'] - a >= 0.04)]
 
 
+def split_phrase(ws, max_words, max_chars):
+    """one phrase into the fewest pages that fit (max_words words, max_chars characters), as [(i, j)] word ranges: never between two
+    capitalised words inside a sentence (a name: «Türkiye Kullanıcı Grubu» stays on one page), no single orphan word, pages near even."""
+    import math
+    L = len(ws)
+    if L == 0: return []
+    ch = lambda i, j: len(' '.join(ws[i:j]))
+    fits = lambda i, j: j - i == 1 or (j - i <= max_words and ch(i, j) <= max_chars)
+    name = lambda j: 0 < j < L and ws[j - 1][:1].isupper() and ws[j][:1].isupper() and not ws[j - 1][-1:] in '.,?!:;'
+    n0 = min(L, max(1, math.ceil(L / max_words), math.ceil(ch(0, L) / max_chars)))
+    for n in range(n0, L + 1):
+        tgt = ch(0, L) / n; INF = float('inf'); D = {(0, 0): (0.0, None)}
+        for k in range(1, n + 1):
+            for j in range(k, L + 1):
+                best = (INF, None)
+                for i in range(k - 1, j):
+                    if (k - 1, i) not in D or not fits(i, j): continue
+                    c = D[(k - 1, i)][0] + (ch(i, j) - tgt) ** 2 + (1e4 if name(i) and i > 0 else 0) + (1e3 if j - i == 1 and L > 1 else 0)
+                    if c < best[0]: best = (c, i)
+                if best[1] is not None: D[(k, j)] = best
+        if (n, L) in D:
+            out, j = [], L
+            for k in range(n, 0, -1): i = D[(k, j)][1]; out.append((i, j)); j = i
+            return out[::-1]
+    return [(i, i + 1) for i in range(L)]
+
+
 def pages_from_words(tl, words_json, max_words, max_chars=28, fix=None, keys=None):
     """caption pages on the spoken words of every kept take: phrases split at punctuation and take edges, then each phrase into
     near-equal pages of at most max_words words / max_chars characters (no orphan word on its own page).
@@ -94,16 +121,13 @@ def pages_from_words(tl, words_json, max_words, max_chars=28, fix=None, keys=Non
             if (s, e) in seen or not tl.kept(s, e): continue   # ASR stretches a word across the pause both takes are cut at; it is said once
             seen.add((s, e)); w = fix.get(w, w)
             if not w or w.endswith('...'): continue   # ASR marks a cut-off false start with '...'
+            if w[0] in "'’" and cur: cur[-1] = (cur[-1][0] + w, cur[-1][1], min(e, b)); continue   # a suffix after an apostrophe (Wikipedia'nın) is one word
             cur.append((w, max(s, a), min(e, b)))
             if w[-1] in '.,?!:;': ph.append(cur); cur = []
         if cur: ph.append(cur)
         for p in ph:
-            chars = len(' '.join(x[0] for x in p))
-            n = max(math.ceil(len(p) / max_words), math.ceil(chars / max_chars), 1)
-            n = min(n, len(p)); size = len(p) / n
-            for c in range(n):
-                g = p[round(c * size):round((c + 1) * size)]
-                if g: items.append((' '.join(x[0] for x in g), g[0][1], g[-1][2], si))
+            for g in split_phrase([x[0] for x in p], max_words, max_chars):
+                g = p[g[0]:g[1]]; items.append((' '.join(x[0] for x in g), g[0][1], g[-1][2], si))
     return pages(tl, items, keys)
 
 

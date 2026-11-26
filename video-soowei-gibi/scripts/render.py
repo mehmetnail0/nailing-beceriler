@@ -39,7 +39,7 @@ o = 0
 for i, x in enumerate(E['segments']):
     fi, fo = int(round(x['in'] * FPS)), int(round(x['out'] * FPS))
     segs.append({'fi': fi, 'fo': fo, 'len': fo - fi, 'o': o, 'x': int(x.get('x', E.get('joint_frames', 0))) if i else 0,
-                 'in': fi / FPS, 'out': fo / FPS})
+                 'in': fi / FPS, 'out': fo / FPS, 'cover': [(int(round(a * FPS)), int(round(b * FPS))) for a, b in x.get('cover', [])]})
     o += fo - fi
 for i, s in enumerate(segs):
     s['hp'] = s['x'] // 2
@@ -130,6 +130,11 @@ if FACE:
     from scipy.ndimage import gaussian_filter1d
     FO = FOL or {}
     _F = json.load(open(FACE))['f']
+    for x in E['segments']:               # a covered card holds the speaker's frame, so it holds that frame's face too
+        fi_ = int(round(x['in'] * FPS))
+        for a_, b_ in x.get('cover', []):
+            a_, b_ = int(round(a_ * FPS)), int(round(b_ * FPS)); src_ = a_ - 1 if a_ - 1 >= fi_ else b_
+            for k_ in range(a_, min(b_, len(_F))): _F[k_] = _F[src_] if src_ < len(_F) else _F[k_]
     _idx = np.array([i for i, x in enumerate(_F) if x])
     _arr = np.array([[_F[i][0], _F[i][1], _F[i][2], _F[i][4], _F[i][6]] for i in _idx], float)
     _full = np.stack([np.interp(np.arange(len(_F)), _idx, _arr[:, k]) for k in range(5)], 1)
@@ -138,6 +143,17 @@ if FACE:
     _has = np.array([1.0 if x else 0.0 for x in _F])        # face present? smoothed, so a take that turns to a screen hands over to a plain crop softly
     HAS = gaussian_filter1d(_has, FO.get('sigma', 14), mode='nearest')
     IO_REF = FO.get('io_ref') or float(np.median(_arr[:, 2]))   # the face size every take is brought to: this clip's own median unless the edit names one
+
+
+def panel_b(t):
+    """bottom (0..1) of the opaque full-width panels across the top of the frame at t (0 when none)."""
+    b = 0.0
+    for L in E.get('layers', []):
+        if L.get('behind') or not (L['t'] <= t < L['e']) or L.get('opacity', 1) < 0.9: continue
+        if L['kind'] == 'bar' and L['bar'].get('opacity', 1) >= 0.9 and L['bar']['w'] >= 0.9 * W:
+            top = L.get('y', 0.5) * H - L['bar']['h'] / 2
+            if top <= 0.02 * H: b = max(b, (top + L['bar']['h']) / H)
+    return b
 
 
 def view(seg, n, t):
@@ -157,8 +173,9 @@ def view(seg, n, t):
     fx_ = SW / 2 + (ex - SW / 2) * FOL.get('follow_x', 1.0)
     hair = by - FOL.get('hair_k', 0.35) * bh
     x0 = min(max(fx_ - ww / 2, 0), SW - ww)
-    ytop = -FOL.get('room_top', 0) * wh       # room_top: the crop may start this much (of the frame) above the clip, for a head shot too high
-    y0 = min(max(min(ey - FOL.get('eye_y', 0.43) * wh, hair - FOL.get('head_margin', 0.035) * wh), ytop), SH - wh)   # under a top panel
+    pb = panel_b(t)                           # an opaque panel across the top: the head fits under it, the crop may start above the clip
+    ytop = -max(FOL.get('room_top', 0), pb) * wh   # room_top: the crop may start this much (of the frame) above the clip (a head shot too high)
+    y0 = min(max(min(ey - FOL.get('eye_y', 0.43) * wh, hair - (pb + FOL.get('head_margin', 0.035)) * wh), ytop), SH - wh)
     if h < 0.999:
         x0 = h * x0 + (1 - h) * (cx * SW - ww / 2); y0 = h * y0 + (1 - h) * (cy * SH - wh / 2)
         x0 = min(max(x0, 0), SW - ww); y0 = min(max(y0, ytop), SH - wh)
@@ -630,10 +647,27 @@ DEC = {}
 fsz = SW * SH * 3
 
 
+HOLD = {}
+
+
+def src_frame(k):
+    b = subprocess.run([FF, '-v', 'error', '-ss', f'{k / FPS:.4f}', '-i', E['mezz'], '-frames:v', '1', '-vf', f"lut3d={E['lut']}:interp=tetrahedral",
+                        '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True).stdout
+    return np.frombuffer(b[:fsz], np.uint8).reshape(SH, SW, 3) if len(b) >= fsz else None
+
+
 def frame_of(i, n):
     if i not in DEC: DEC[i] = dec(segs[i], n)
     b = DEC[i].stdout.read(fsz)
-    return np.frombuffer(b, np.uint8).reshape(SH, SW, 3) if len(b) == fsz else None
+    img = np.frombuffer(b, np.uint8).reshape(SH, SW, 3) if len(b) == fsz else None
+    s = segs[i]; k = s['fi'] - s['hp'] + (max(s['s0'], n) - s['s0']) if 's0' in s else None
+    cv = next(((a_, b_) for a_, b_ in s['cover'] if k is not None and a_ <= k < b_), None)
+    if cv is None:
+        if img is not None: HOLD[i] = img
+        return img
+    if HOLD.get(('c', i)) != cv:      # a card inside the take: the speaker's last frame before it (or the first after it, at a take start) holds
+        HOLD[i] = HOLD[i] if i in HOLD else src_frame(cv[1]); HOLD[('c', i)] = cv
+    return HOLD[i]
 
 
 # ---------- --fit: words behind the speaker and pinned stills, measured against the speaker's cut-out and moved where the edit asks ----------
@@ -860,9 +894,32 @@ def chin_y(n):
     return v and v[1]
 
 
+SAFE_Y = (E['safe'][1], E['safe'][3]) if E.get('safe') else (0.12, 0.86)     # edit.json "safe": [x0, y0, x1, y1] (0..1), as yerlesim.py reads it
+def rest_box(L):
+    """a still layer's box in output pixels where it rests (None for kinds without sprites)."""
+    sp = layer_sprites(L) if L.get('kind') in ('text', 'image', 'bar') else []
+    if not sp: return None
+    ax, ay = L.get('x', 0.5) * W, L.get('y', 0.5) * H
+    return (min(ax + xo for _, xo, yo, _k in sp), min(ay + yo for _, xo, yo, _k in sp),
+            max(ax + xo + r.shape[1] for r, xo, yo, _k in sp), max(ay + yo + r.shape[0] for r, xo, yo, _k in sp))
+
+
+def reserved(t0, t1):
+    """boxes a caption must stay out of over [t0, t1): every layer in front of the speaker on screen then (a panel, a title, a card)."""
+    out = []
+    for L in E.get('layers', []):
+        if L.get('behind') or L.get('track') or not (L['t'] < t1 and t0 < L['e']): continue
+        b = rest_box(L)
+        if b: out.append(b)
+    return out
+
+
+def _hit(a, b): return a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
+
+
 ON_FACE, CAPS_MOVED = [], []
 if E['caption'].get('below_face') is not None and FSM is not None:      # never on the face: each page sits under the chin over its own span,
-    SAFE_TOP = E.get('safe', {}).get('y0', 0.12) * H                     # or above the hair when the bottom of the frame has no room
+    SAFE_TOP = SAFE_Y[0] * H                                              # or above the hair when the bottom of the frame has no room
     for c in caps:
         arr, x, y = render_caption(c)
         fs = [face_span_y(n) for n in range(int(c['t'] * FPS), max(int(c['t'] * FPS) + 1, int(c['e'] * FPS)))]
@@ -871,15 +928,22 @@ if E['caption'].get('below_face') is not None and FSM is not None:      # never 
         top = (max(v[1] for v in fs) + E['caption']['below_face']) * H
         if y < top:
             lim = H * E['caption'].get('y_max', 0.86) - arr.shape[0]
-            if top <= lim: CAP_CACHE[id(c)] = (arr, x, int(top)); continue
+            rz = reserved(c['t'], c['e']); clear = lambda yy: not any(_hit((x, yy, x + arr.shape[1], yy + arr.shape[0]), r) for r in rz)
+            if top <= lim and clear(top): CAP_CACHE[id(c)] = (arr, x, int(top)); continue
             above = (min(v[0] for v in fs) - E['caption']['below_face']) * H - arr.shape[0]
-            if above >= SAFE_TOP: CAP_CACHE[id(c)] = (arr, x, int(above)); CAPS_MOVED.append(round(c['t'], 2))
+            if above >= SAFE_TOP and clear(above): CAP_CACHE[id(c)] = (arr, x, int(above)); CAPS_MOVED.append(round(c['t'], 2))
             else: ON_FACE.append(round(c['t'], 2)); CAP_CACHE[id(c)] = (arr, x, int(lim))   # no room above or below: named in the report
 
 
+HEAD_IN_PANEL = []       # seconds where the hair still reaches into a top panel (a face too big to fit under it): named in the report
+if FSM is not None:
+    for n in range(0, sum(s_['len'] for s_ in segs), 3):
+        hb_, pb_ = head_box(n), panel_b(n / FPS)
+        if hb_ and pb_ and hb_[1] < pb_ * H - 4 and not (HEAD_IN_PANEL and n / FPS - HEAD_IN_PANEL[-1] < 1): HEAD_IN_PANEL.append(round(n / FPS, 2))
 LAYERS_MOVED_OFF_FACE, LAYERS_ON_FACE = [], []
-if FSM is not None:      # a text layer in front of the speaker never sits on the head: it moves above the hair, else under the chin, inside the
-    SY0, SY1 = E.get('safe', {}).get('y0', 0.12) * H, E.get('safe', {}).get('y1', 0.86) * H     # free frame and clear of the captions;
+if FSM is not None:      # a text layer in front of the speaker never sits on the head: it moves above the hair, else under the chin, else beside the head, inside the
+    SX0, SX1 = ((E['safe'][0], E['safe'][2]) if E.get('safe') else (0.04, 0.96)); SX0, SX1 = SX0 * W, SX1 * W
+    SY0, SY1 = SAFE_Y[0] * H, SAFE_Y[1] * H                                                    # free frame and clear of the captions;
     def _cap_boxes(t0, t1):                                                                     # "on_face": true keeps one there on purpose
         out = []
         for c in caps:
@@ -889,20 +953,24 @@ if FSM is not None:      # a text layer in front of the speaker never sits on th
     hit = lambda a, b: a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
     for li, L in enumerate(LAY):
         if L.get('kind') != 'text' or L.get('behind') or L.get('track') or L.get('full') or L.get('on_face') or L.get('move'): continue
-        sp = layer_sprites(L)
-        if not sp: continue
-        ax, ay = L.get('x', 0.5) * W, L.get('y', 0.5) * H
-        bx = (min(ax + xo for _, xo, yo, _k in sp), min(ay + yo for _, xo, yo, _k in sp),
-              max(ax + xo + r.shape[1] for r, xo, yo, _k in sp), max(ay + yo + r.shape[0] for r, xo, yo, _k in sp))
+        bx = rest_box(L)
+        if not bx: continue
+        if any(Q is not L and Q['kind'] != 'text' and not Q.get('behind') and Q['t'] <= L['t'] + 0.05 and L['e'] <= Q['e'] + 0.05
+               and (r := rest_box(Q)) and r[0] <= bx[0] + 8 and r[1] <= bx[1] + 8 and bx[2] <= r[2] + 8 and bx[3] <= r[3] + 8 for Q in LAY): continue   # text on its own card goes with the card
         hb = [head_box(n) for n in range(int(L['t'] * FPS), max(int(L['t'] * FPS) + 1, int(L['e'] * FPS)), 5)]
         hb = [b for b in hb if b and hit(b, bx)]
         if not hb: continue
         u = (min(b[0] for b in hb), min(b[1] for b in hb), max(b[2] for b in hb), max(b[3] for b in hb)); hgt = bx[3] - bx[1]; gap = 0.015 * H
-        cb = _cap_boxes(L['t'], L['e'])
-        for dy in (u[1] - gap - bx[3], u[3] + gap - bx[1]):
-            nb = (bx[0], bx[1] + dy, bx[2], bx[3] + dy)
-            if SY0 <= nb[1] and nb[3] <= SY1 and not any(hit(nb, c) for c in cb):
-                L['y'] = round(L.get('y', 0.5) + dy / H, 4); LAYERS_MOVED_OFF_FACE.append(li); break
+        others = [Q for q, Q in enumerate(LAY) if q != li and not Q.get('behind') and Q['t'] < L['e'] and L['t'] < Q['e']
+                  and not (Q['kind'] == 'bar' and Q['bar']['w'] >= 0.9 * W)]          # a full-width panel is the ground titles sit on, not in the way
+        cb = _cap_boxes(L['t'], L['e']) + [r for r in map(rest_box, others) if r]
+        sg = 0.04 * W                                                                 # hair reaches wider than the face box
+        sides = sorted((u[0] - sg - bx[2], u[2] + sg - bx[0]), key=abs)               # then beside the head, the nearer side first,
+        lift = sorted(range(int(SY0 - bx[1]), int(SY1 - bx[3]) + 1, 20), key=abs)     # at the height nearest the edit's that is free
+        for dx, dy in [(0, u[1] - gap - bx[3]), (0, u[3] + gap - bx[1])] + [(d, y_) for y_ in lift for d in sides]:
+            nb = (bx[0] + dx, bx[1] + dy, bx[2] + dx, bx[3] + dy)
+            if SY0 <= nb[1] and nb[3] <= SY1 and SX0 <= nb[0] and nb[2] <= SX1 and not hit(nb, u) and not any(hit(nb, c) for c in cb):
+                L['x'] = round(L.get('x', 0.5) + dx / W, 4); L['y'] = round(L.get('y', 0.5) + dy / H, 4); LAYERS_MOVED_OFF_FACE.append(li); break
         else: LAYERS_ON_FACE.append(li)
 
 
@@ -949,8 +1017,30 @@ def with_halo(arr, light):
     return np.dstack([rgb, na * 255]).clip(0, 255).astype(np.uint8), r * 2
 
 
+def busy(arr, x, y, frame):
+    """how busy the picture right round the letters is (spread of its luminance, 0..0.5): a print, a crowd, foliage."""
+    h, w = arr.shape[:2]; X0, Y0, X1, Y1 = max(x, 0), max(y, 0), min(x + w, W), min(y + h, H)
+    if X1 <= X0 or Y1 <= Y0: return 0.0
+    m = (arr[Y0 - y:Y1 - y, X0 - x:X1 - x, 3] > 60).astype(np.uint8)
+    ring = cv2.dilate(m, np.ones((25, 25), np.uint8)) > 0
+    L = _rl(frame[Y0:Y1, X0:X1])[ring]
+    return float(L.std()) if L.size > 200 else 0.0
+
+
+def with_box(arr, light):
+    """the page on a rounded backing box (dark under light letters, light under dark ones): for a picture too busy for an outline."""
+    a = arr[..., 3]; ys, xs = np.nonzero(a > 40)
+    if not len(ys): return arr
+    r = max(10, int(arr.shape[0] / 12))
+    im = Image.new('RGBA', (arr.shape[1], arr.shape[0]), (0, 0, 0, 0))
+    ImageDraw.Draw(im).rounded_rectangle([max(0, xs.min() - r), max(0, ys.min() - r // 2), min(arr.shape[1] - 1, xs.max() + r), min(arr.shape[0] - 1, ys.max() + r // 2)],
+                                         radius=r, fill=((16, 16, 16) if light else (240, 240, 240)) + (200,))
+    im.alpha_composite(Image.fromarray(arr)); return np.array(im)
+
+
 CAP_LEG = {}            # id(page) -> last check time; a page that reads below 3:1 gets a halo (a gate fixes before it refuses)
-CAPS_HALO = []
+CAPS_HALO, CAPS_BOX = [], []
+CAP_PLAIN = {}
 
 
 n_out = 0; r0, r1 = int(round(sl[0] * FPS)), int(round(sl[1] * FPS))
@@ -1047,17 +1137,22 @@ for n in range(0 if a.reuse_video else NF):
     for c in caps:
         if not hide and c['t'] <= t < c['e']:
             arr, x, y = render_caption(c)
-            if cs.get('auto_contrast', True) and CAP_LEG.get(id(c), -9) <= t - 0.5:
+            if cs.get('auto_contrast', True) and CAP_LEG.get(id(c), -9) <= t - 0.1:     # the picture under a page can change mid-page (a blur ends)
                 CAP_LEG[id(c)] = t
                 if caption_contrast(arr, x, y, frame) < 3.0:
+                    if t > c['t'] + 0.05: CAP_PLAIN[id(c)] = (arr, x, y, t)              # fixed mid-page: the outline / box fades in, never pops
                     lum = _rl(arr[..., :3][arr[..., 3] > 200]); arr2, d = with_halo(arr, float(np.median(lum)) > 0.35 if lum.size else True)
+                    if busy(arr, x, y, frame) > 0.14:      # an outline does not carry letters over a busy picture: a backing box does
+                        arr2 = with_box(arr2, float(np.median(lum)) > 0.35 if lum.size else True); CAPS_BOX.append(round(c['t'], 2))
                     CAP_CACHE[id(c)] = (arr2, x - d, y - d); arr, x, y = arr2, x - d, y - d; CAP_LEG[id(c)] = 1e9; CAPS_HALO.append(round(c['t'], 2))
             fade = cs.get('fade', 0)
             u = (t - c['t']) / fade if fade else 1
             al = ease({'bez': cs.get('bez', [0.25, 0.1, 0.25, 1])}, u) if fade else 1
             pop = cs.get('pop', 0)
             sc = 1 + pop * max(0, 1 - (t - c['t']) / 0.18) if pop else 1
-            blend(frame, arr, x, y + cs.get('rise', 0) * (1 - al), al, sc)
+            pl = CAP_PLAIN.get(id(c)); k = min(1.0, (t - pl[3]) / 0.15) if pl else 1.0
+            if k < 1: blend(frame, pl[0], pl[1], pl[2] + cs.get('rise', 0) * (1 - al), al * (1 - k), sc)
+            blend(frame, arr, x, y + cs.get('rise', 0) * (1 - al), al * k, sc)
     for L in live:
         if L.get('over_caps'): draw_layer(frame, L, t)       # marks on the caption itself (a strike, a circle) go over it
     for c in accs:
@@ -1124,5 +1219,5 @@ venc = (['-c:v', 'h264_nvenc', '-preset', 'p6', '-tune', 'hq', '-rc', 'vbr', '-c
 vmap = ['-filter_complex', ';'.join(vf), '-map', f'[{cur}]'] + venc if vf else ['-map', '0:v', '-c:v', 'copy']
 subprocess.run([FF, '-v', 'error', '-y'] + vin + vmap + ['-map', '1:a', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', a.out], check=True)
 os.remove(tmpa)
-print(json.dumps({'out': a.out, 'caps_on_face': ON_FACE, 'caps_moved_above_face': CAPS_MOVED, 'caps_halo': CAPS_HALO, 'layers_moved_off_face': LAYERS_MOVED_OFF_FACE, 'layers_on_face': LAYERS_ON_FACE, 'frames': n_out, 'dur': round(n_out / FPS, 2), 'cuts': len(cut_times), 'cut_t': [round(c, 2) for c in cut_times],
+print(json.dumps({'out': a.out, 'caps_on_face': ON_FACE, 'caps_moved_above_face': CAPS_MOVED, 'caps_halo': CAPS_HALO, 'caps_box': CAPS_BOX, 'layers_moved_off_face': LAYERS_MOVED_OFF_FACE, 'layers_on_face': LAYERS_ON_FACE, 'head_in_panel': HEAD_IN_PANEL, 'frames': n_out, 'dur': round(n_out / FPS, 2), 'cuts': len(cut_times), 'cut_t': [round(c, 2) for c in cut_times],
                   'video_s': round(tv, 1), 'total_s': round(time.time() - T0, 1)}))

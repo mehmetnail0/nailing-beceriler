@@ -41,12 +41,15 @@ for i, s in enumerate(segs):
 DUR = round(round(total * fps) / fps, 2)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from timeline import noface
-if not E.get('allow_noface'):
-    for a, b in noface(os.path.join(os.path.dirname(path(E['mezz'])), 'face.json')):
-        for i, s in enumerate(segs):
-            if min(b, s['out']) - max(a, s['in']) >= 0.2:
-                bad.append(f'segment {i} ({s["in"]}-{s["out"]}) runs through {a}-{b} s where no speaker is in the picture (a title card, a logo, a cutaway: '
-                           f'see work/src.jpg). End the take before {a} or start it after {b}; to show it on purpose set "allow_noface": true.')
+covered = []
+if not E.get('allow_noface'):      # the voice goes on over a card: the take keeps it and the picture holds the speaker (fixed here, never refused)
+    NF_ = noface(os.path.join(os.path.dirname(path(E['mezz'])), 'face.json'))
+    for i, s in enumerate(E['segments']):
+        cv = [[max(a, s['in']), min(b, s['out'])] for a, b in NF_ if min(b, s['out']) - max(a, s['in']) >= 0.05]
+        if cv and s.get('cover') != cv:
+            s['cover'] = cv; covered.append(f'segment {i}: the speaker\'s picture holds over {cv} (no speaker there; the voice goes on)')
+    if covered:
+        json.dump(E, open(sys.argv[1], 'w'), ensure_ascii=False, indent=1); print('fixed: ' + '; '.join(covered))
 
 for k in ('mezz', 'audio', 'lut'):
     if not os.path.exists(path(E[k])): bad.append(f'file for "{k}" is missing: {E[k]}' + (' (make it first: python3 scripts/lut.py work/look.cube --strength 0.75; hizli.sh go does this itself)' if k == 'lut' else ''))
@@ -79,9 +82,11 @@ for i, c in enumerate(caps):
 cs = E['caption']
 cap_top = cs.get('y', 0.74) * H - (cs.get('size', 70) * 1.3 * 2 + 40) / 2   # worst case two lines
 z0, z1 = (E['safe'][1], E['safe'][3]) if E.get('safe') else (0.12, 0.86)      # edit.json "safe" (0..1) when the measured refs write lower or higher
-if cs.get('y', 0.74) > z1 or cs.get('y', 0.74) < z0:
-    bad.append(f'caption y={cs.get("y")} is outside the free part of the frame (y {z0}-{z1}; the phone app covers the rest). '
-               f'Move it, or set edit.json "safe": [x0, y0, x1, y1] when your refs measured captions there.')
+if cs.get('y', 0.74) > z1 or cs.get('y', 0.74) < z0:          # fixed here, never refused: the seat comes into the free frame
+    y_ = cs.get('y', 0.74); cs['y'] = round(min(max(y_, z0), z1), 4)
+    json.dump(E, open(sys.argv[1], 'w'), ensure_ascii=False, indent=1)
+    print(f'fixed: caption y {y_} -> {cs["y"]} (outside the free part of the frame, y {z0}-{z1}: the phone app covers the rest; '
+          f'set edit.json "safe": [x0, y0, x1, y1] when your refs measured captions there)')
 
 for a in E.get('accents', []):
     if a['e'] <= a['t']: bad.append(f'accent "{a["text"]}": ends before it starts.')

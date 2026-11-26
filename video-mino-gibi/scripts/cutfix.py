@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Turn what the word-level cut QC (kesim_qc.py, on the FINAL mix) found into SOURCE-time fixes in work/cut_fixes.json;
 timeline.TL applies them on the next decide.py run, so the edit is re-cut, not patched.
-usage: cutfix.py report.json edit.json words.json [cut_fixes.json]
+usage: cutfix.py report.json edit.json words.json [cut_fixes.json] [--retreat t1,t2]
+  --retreat           cutgate passes the output times of spots that failed again after the edge was opened: those edges now close
+                      in to the words the take is about (out edge just after its last whole word, in edge just before its first), so
+                      the onset or tail of a word the take was never meant to hold goes.
   in_word / fragment  the take edge at that cut opens to the quietest point of the pause next to its word (the word is let
                       finish / starts whole): no word he says is lost. A fragment that is a whole short word in the source,
                       with room at the edge, is listed as checked.
@@ -15,6 +18,8 @@ The render gives every hard joint its 12 ms ease. Prints JSON {changed, checked,
 import json, math, os, re, sys, unicodedata
 import numpy as np
 
+RT = [float(x) for x in sys.argv[sys.argv.index('--retreat') + 1].split(',') if x] if '--retreat' in sys.argv else []
+if '--retreat' in sys.argv: i_ = sys.argv.index('--retreat'); del sys.argv[i_:i_ + 2]
 rep, ej, wj = sys.argv[1:4]
 out = sys.argv[4] if len(sys.argv) > 4 else os.path.join(os.path.dirname(os.path.abspath(ej)), 'cut_fixes.json')
 E = json.load(open(ej)); FPS = E.get('fps', 30); R = json.load(open(rep))
@@ -50,13 +55,13 @@ def src_of(t):
     return None, None
 
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from timeline import noface
-NF = noface(os.path.join(os.path.dirname(os.path.abspath(ej)), 'face.json'))
 
 
-def move(old, new, why):
-    if any(a + 0.02 < new < b - 0.02 for a, b in NF): return False     # never into a stretch with no speaker (a title card, a cutaway)
+SRC_END = max([w['e'] for w in SW] + [b for _, b, _ in P]) + 0.5
+
+
+def move(old, new, why):      # an edge may run into a stretch with no speaker: check_edit holds his picture there (cover), the voice goes on
+    new = min(max(new, 0.0), SRC_END)                                  # never before the clip starts or past its end
     if abs(new - old) < 0.005: return False
     for d in fx['drop']:
         for j in (0, 1):
@@ -88,6 +93,21 @@ def open_edge(k, side, kind):
     if w['s'] - a >= 0.06: return False
     lim = max(prv[-1]['e'], w['s'] - 0.25) if prv else w['s'] - 0.15
     return move(a, min(a - 0.005, quiet(lim, w['s'])), f'{kind}: “{w["w"]}” starts whole')
+
+
+def retreat(k):
+    """close the joint before piece k in to the words: the out edge of k-1 just after its last whole word, the in edge of k just
+    before its first. What lies outside is a pause or a word the take was never meant to hold."""
+    done = False
+    a1, b1, _ = P[k - 1]; ws = [w for w in SW if a1 <= w['s'] and w['e'] <= b1 + 0.02]
+    if ws and b1 - ws[-1]['e'] > 0.03:
+        nx = [x['s'] for x in SW if x['s'] >= ws[-1]['e'] - 0.01 and x is not ws[-1]]
+        done |= move(b1, quiet(ws[-1]['e'], min(ws[-1]['e'] + 0.06, b1, *(nx[:1]))), 'failed again: the out edge closes to its last whole word')
+    a2, b2, _ = P[k]; ws = [w for w in SW if a2 - 0.02 <= w['s'] and w['e'] <= b2]
+    if ws and ws[0]['s'] - a2 > 0.03:
+        pv = [x['e'] for x in SW if x['e'] <= ws[0]['s'] + 0.01 and x is not ws[0]]
+        done |= move(a2, quiet(max(ws[0]['s'] - 0.06, a2, *(pv[-1:])), ws[0]['s']), 'failed again: the in edge closes to its first whole word')
+    return done
 
 
 def sliver(k, names, kind, side):
@@ -138,11 +158,15 @@ for it in R.get('issues', []):
             fx['drop'].append(span); changed.append(f'drop {a0:.2f}-{b0:.2f} s ({kind}: “{" ".join(it["words"])}”)'); continue
         ctx = ' '.join(x['w'] for x in SW if f1['s'] - 2.5 < x['s'] < f1['s'] + 3)
         gap = round((min(SW, key=lambda x: abs(x['s'] - sw_))['s'] - f1['e']) if sw_ is not None else 0, 2)
-        judge.append(dict(words=it['words'], out_t=t, drop_if_stumble=span, pause_s=gap, context=ctx))
+        judge.append(dict(words=it['words'], out_t=t, src_span=span, pause_s=gap, context=ctx,
+                          do='src_span is in SOURCE seconds: copy it into cut_fixes.json "keep" (meant) or "drop" (a stumble)'))
         continue
     if kind not in ('in_word', 'fragment') or c is None: unmapped.append(it); continue     # av_drift = the render's sync math, not an edit: refuse
     k = min(range(1, len(P)), key=lambda j: abs(P[j][2] - c)) if len(P) > 1 else None
     if k is None: unmapped.append(it); continue
+    if any(abs(t - x) < 0.6 or abs(c - x) < 0.6 for x in RT):
+        if retreat(k): continue
+        unmapped.append(it); continue
     hit = [x for x in OW if x['s'] < c < x['e']] if kind == 'in_word' else []
     ow = hit[0] if hit else min(OW, key=lambda x: abs(x['s'] - t)) if OW else None
     if kind == 'in_word': done = open_edge(k - 1, 'out', kind) | open_edge(k, 'in', kind)

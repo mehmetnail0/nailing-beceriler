@@ -174,8 +174,8 @@ def test_yerlesim_names_overlapping_text():
     assert any(l.startswith('overlap:') for l in y.check({'layers': [T(0.4, 'bir'), T(0.42, 'iki')]}, fonts)[1])
 
 
-def test_noface_spans_and_check_edit_refuses_a_take_through_one(tmp_path):
-    """frames with no face (a title card in the clip) become source spans; check_edit names a take that runs through one."""
+def test_noface_spans_and_check_edit_covers_a_take_through_one(tmp_path):
+    """frames with no face (a title card in the clip) become source spans; check_edit covers a take that runs through one."""
     tl = load(VS[0], 'timeline')
     f = [[1, 1, 1, 1]] * 60 + [[]] * 30 + [[1, 1, 1, 1]] * 60 + [[]] * 3 + [[1, 1, 1, 1]] * 10
     (tmp_path / 'face.json').write_text(json.dumps({'fps': 30, 'f': f}))
@@ -188,10 +188,11 @@ def test_noface_spans_and_check_edit_refuses_a_take_through_one(tmp_path):
          'segments': [{'in': 0.5, 'out': 4.5}], 'captions': [], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}]}
     (w / 'edit.json').write_text(json.dumps(E))
     r = subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'check_edit.py'), 'work/edit.json'], cwd=tmp_path, capture_output=True, text=True)
-    assert 'no speaker' in r.stdout, r.stdout + r.stderr
+    assert 'holds over' in r.stdout, r.stdout + r.stderr                  # fixed, not refused: the voice goes on, the picture holds the speaker
+    assert json.load(open(w / 'edit.json'))['segments'][0]['cover'] == [[2.0, 3.0]]
     E['segments'] = [{'in': 0.5, 'out': 1.9}, {'in': 3.1, 'out': 4.5}]; (w / 'edit.json').write_text(json.dumps(E))
     r = subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'check_edit.py'), 'work/edit.json'], cwd=tmp_path, capture_output=True, text=True)
-    assert 'no speaker' not in r.stdout, r.stdout
+    assert 'holds over' not in r.stdout and 'cover' not in json.load(open(w / 'edit.json'))['segments'][0], r.stdout
 
 
 def test_check_edit_caption_zone_follows_the_edit_safe_area(tmp_path):
@@ -201,8 +202,9 @@ def test_check_edit_caption_zone_follows_the_edit_safe_area(tmp_path):
     E = {'mezz': 'work/mezz.mp4', 'audio': 'work/a48.wav', 'lut': 'work/look.cube', 'fps': 30, 'style': {}, 'caption': {'y': 0.875},
          'segments': [{'in': 0.5, 'out': 4.5}], 'captions': [], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}]}
     run = lambda: subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'check_edit.py'), 'work/edit.json'], cwd=tmp_path, capture_output=True, text=True).stdout
-    (w / 'edit.json').write_text(json.dumps(E)); assert 'caption y=0.875' in run()
-    E['safe'] = [0.05, 0.1, 0.9, 0.9]; (w / 'edit.json').write_text(json.dumps(E)); assert 'caption y=' not in run()
+    (w / 'edit.json').write_text(json.dumps(E)); out = run()
+    assert 'caption y 0.875 -> 0.86' in out and json.load(open(w / 'edit.json'))['caption']['y'] == 0.86   # fixed, not refused
+    E['safe'] = [0.05, 0.1, 0.9, 0.9]; (w / 'edit.json').write_text(json.dumps(E)); assert 'caption y' not in run()
 
 
 def test_decide_skeleton_stops_empty_then_writes_an_edit(tmp_path):
@@ -233,16 +235,16 @@ def test_noface_counts_a_short_flash_where_the_picture_jumps(tmp_path):
     assert tl.noface(str(tmp_path / 'face.json')) == [(2.0, 2.1)]       # a green flash frame, not a blink
 
 
-def _render(tmp_path, colour, caption, face=None, layers=()):
+def _render(tmp_path, colour, caption, face=None, layers=(), seg=None, at=0.5):
     """a 1 s plain clip of one colour through render.py; returns the report and the middle frame (RGB)."""
     import subprocess, numpy as np
     w = tmp_path / 'work'; w.mkdir(exist_ok=True)
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'color=c={colour}:s=1440x2560:r=30:d=1', '-f', 'lavfi', '-i',
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', colour if '=' in colour else f'color=c={colour}:s=1440x2560:r=30:d=1', '-f', 'lavfi', '-i',
                     'sine=f=220:d=1:sample_rate=48000', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-shortest', str(w / 'mezz.mp4')], check=True)
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(w / 'mezz.mp4'), '-vn', '-ac', '1', '-ar', '48000', str(w / 'a48.wav')], check=True)
     (w / 'look.cube').write_text('LUT_3D_SIZE 2\n' + ''.join(f'{r} {g} {b}\n' for b in (0, 1) for g in (0, 1) for r in (0, 1)))   # identity
     E = {'mezz': 'work/mezz.mp4', 'audio': 'work/a48.wav', 'lut': 'work/look.cube', 'fps': 30, 'style': {}, 'fonts': os.path.join(ROOT, VS[0], 'fonts'),
-         'segments': [{'in': 0, 'out': 1}], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}], 'caption': caption,
+         'segments': [seg or {'in': 0, 'out': 1}], 'camera': [{'t': 0, 'd': 0, 'to': 1.0}], 'caption': caption,
          'captions': [{'t': 0, 'e': 1, 'text': 'beyaz yazı'}], 'layers': list(layers)}
     if face: (w / 'face.json').write_text(json.dumps(face)); E['caption']['face'] = 'work/face.json'
     (w / 'edit.json').write_text(json.dumps(E))
@@ -250,7 +252,7 @@ def _render(tmp_path, colour, caption, face=None, layers=()):
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     rep = json.loads([x for x in r.stdout.splitlines() if x.startswith('{')][-1])
-    fr = subprocess.run(['ffmpeg', '-v', 'error', '-ss', '0.5', '-i', str(w / 'out.mp4'), '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
+    fr = subprocess.run(['ffmpeg', '-v', 'error', '-ss', str(at), '-i', str(w / 'out.mp4'), '-frames:v', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
                         capture_output=True, check=True).stdout
     return rep, np.frombuffer(fr, np.uint8).reshape(1920, 1080, 3)
 
@@ -264,8 +266,14 @@ def test_render_gives_an_unreadable_caption_a_halo(tmp_path):
     assert rep['caps_halo'] == [0.0]
     band = fr[int(0.64 * 1920):int(0.76 * 1920)]
     assert band.min() < 80                                                   # something dark now edges the letters
+    assert rep['caps_box'] == []                                             # a plain picture: an outline is enough
     rep, _ = _render(tmp_path, 'black', dict(cap))
     assert rep['caps_halo'] == []
+    rep, _ = _render(tmp_path, 'life=s=1440x2560:r=30:ratio=0.7:mold=0:life_color=#FFFFFF:death_color=#000000:seed=3', dict(cap))
+    assert rep['caps_box'] == [0.0], rep                                     # a busy print: the page gets a backing box
+    rep, fr = _render(tmp_path, "color=c=black:s=1440x2560:r=30:d=1,format=yuv420p,geq=lum='if(lt(T,0.3),16,235)':cb=128:cr=128", dict(cap), at=0.9)
+    assert rep['caps_halo'] == [0.0], rep                                    # the picture turns white mid-page: the outline comes in then
+    assert fr[int(0.64 * 1920):int(0.76 * 1920)].min() < 80
 
 
 @pytest.mark.skipif(not __import__('shutil').which('ffmpeg') or not importlib.util.find_spec('cv2') or not importlib.util.find_spec('scipy'),
@@ -289,3 +297,111 @@ def test_render_moves_a_title_off_the_head(tmp_path):
     assert rep['layers_moved_off_face'] == [0] and rep['layers_on_face'] == [], rep
     rep, _ = _render(tmp_path, 'gray', {'y': 0.8, 'size': 60}, face, [dict(title, on_face=True)])
     assert rep['layers_moved_off_face'] == []
+    tall = {'w': 1440, 'h': 2560, 'fps': 30, 'f': [[720, 1000, 150, 620, 60, 200, 2480, 0.9]] * 30}    # a head from top to bottom: no room above or under
+    num = {'kind': 'text', 't': 0, 'e': 1, 'x': 0.5, 'y': 0.45, 'text': {'text': '1.', 'font': 'Inter.ttf', 'size': 90}}
+    rep, fr = _render(tmp_path, 'gray', {'y': 0.8, 'size': 60}, tall, [num])
+    assert rep['layers_moved_off_face'] == [0] and rep['layers_on_face'] == [], rep          # beside the head instead
+    card = {'kind': 'bar', 't': 0, 'e': 1, 'x': 0.5, 'y': 0.45, 'bar': {'w': 1000, 'h': 160, 'color': '#FFFFFF'}}
+    rep, _ = _render(tmp_path, 'gray', {'y': 0.8, 'size': 60}, tall, [dict(num, y=0.40), card])
+    assert rep['layers_moved_off_face'] == [0] and rep['layers_on_face'] == [], rep          # a card beside it too: slides to a free height
+
+
+def test_cutfix_judges_a_whole_word_in_source_seconds_then_honours_keep(tmp_path):
+    """“lisansla lisanslanmıştır” is meant Turkish: the engine never drops it alone, it hands the model a span in SOURCE seconds;
+    once that span is in "keep" it is never asked again."""
+    import subprocess
+    ws = [('bu', 10.0, 10.2), ('program', 10.25, 10.7), ('lisansla', 11.0, 11.4), ('lisanslanmıştır', 11.5, 12.2), ('ve', 12.3, 12.4)]
+    (tmp_path / 'words.json').write_text(json.dumps({'segments': [{'words': [{'w': w, 's': a, 'e': b, 'p': 0.9} for w, a, b in ws]}]}))
+    E = {'fps': 30, 'audio': 'none.wav', 'segments': [{'in': 9.5, 'out': 13.0}]}
+    (tmp_path / 'edit.json').write_text(json.dumps(E))
+    R = {'issues': [{'kind': 'false_start', 't': 1.5, 'words': ['lisansla', 'lisanslanmıştır']}],
+         'words': [{'w': w, 's': a - 9.5, 'e': b - 9.5} for w, a, b in ws]}
+    (tmp_path / 'report.json').write_text(json.dumps(R))
+    run = lambda: json.loads(subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'cutfix.py'), 'report.json', 'edit.json', 'words.json'],
+                                            cwd=tmp_path, capture_output=True, text=True).stdout)
+    r = run()
+    assert not r['changed'] and len(r['judge']) == 1
+    a, b = r['judge'][0]['src_span']
+    assert 10.7 <= a <= 11.0 and 11.4 <= b <= 11.5                          # source seconds round “lisansla”, not output seconds
+    fx = json.load(open(tmp_path / 'cut_fixes.json')) if (tmp_path / 'cut_fixes.json').exists() else {}
+    fx['keep'] = [[a, b]]; (tmp_path / 'cut_fixes.json').write_text(json.dumps(fx))
+    r = run()
+    assert r['judge'] == [] and r['checked']
+
+
+def test_cutfix_closes_an_opened_edge_in_to_the_words_and_may_run_over_a_card(tmp_path):
+    """a joint that failed again after its edge was opened: --retreat closes the out edge to just after the take's last whole
+    word and the in edge to just before the next take's first word. A word cut by an edge inside a stretch with no speaker is let
+    finish (the picture holds there), not left cut."""
+    import subprocess
+    ws = [('özgür', 10.8, 11.2), ('lisanslanmıştır', 11.5, 12.96), ('Günümüzü', 13.26, 13.7), ('güncelleyebilir', 23.38, 24.18), ('Bir', 25.2, 25.4), ('site', 25.45, 25.8)]
+    (tmp_path / 'words.json').write_text(json.dumps({'segments': [{'words': [{'w': w, 's': a, 'e': b, 'p': 0.9} for w, a, b in ws]}]}))
+    (tmp_path / 'face.json').write_text(json.dumps({'w': 100, 'h': 100, 'fps': 30, 'f': [[50, 50, 10, 40, 40, 20, 20, .9]] * 708 + [None] * 56 + [[50, 50, 10, 40, 40, 20, 20, .9]] * 300}))
+    E = {'fps': 30, 'audio': 'none.wav', 'segments': [{'in': 10.5, 'out': 13.1}, {'in': 23.0, 'out': 24.0}, {'in': 25.1, 'out': 26.0}]}
+    (tmp_path / 'edit.json').write_text(json.dumps(E))
+    run = lambda R, *x: json.loads(subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'cutfix.py'), 'report.json', 'edit.json', 'words.json', *x],
+                                                  cwd=tmp_path, capture_output=True, text=True).stdout)
+    (tmp_path / 'report.json').write_text(json.dumps({'issues': [{'kind': 'in_word', 't': 2.6, 'cut': 2.6, 'words': ['Ayrıca']}], 'words': []}))
+    r = run(None, '--retreat', '2.6')
+    assert r['unmapped'] == [] and any('closes to its last whole word' in x for x in r['changed'])
+    snap = json.load(open(tmp_path / 'cut_fixes.json'))['snap']
+    assert any(abs(o - 13.1) < 0.02 and 12.96 <= n <= 13.02 for o, n in snap)                 # just after “lisanslanmıştır”, before 13.26
+    (tmp_path / 'cut_fixes.json').unlink()
+    (tmp_path / 'report.json').write_text(json.dumps({'issues': [{'kind': 'in_word', 't': 3.6, 'cut': 3.6, 'words': ['güncelleyebilir']}],
+                                                      'words': [{'w': 'güncelleyebilir', 's': 3.0, 'e': 3.7}]}))
+    r = run(None)
+    snap = json.load(open(tmp_path / 'cut_fixes.json'))['snap']
+    assert any(abs(o - 24.0) < 0.02 and n >= 24.18 for o, n in snap), r                     # finishes inside the card stretch (23.6-25.47)
+    assert r['unmapped'] == []                                                                  # the cut at the last joint maps to a source edge
+    (tmp_path / 'cut_fixes.json').unlink()
+    E['segments'] = [{'in': 25.0, 'out': 26.0}, {'in': 0.03, 'out': 1.0}]; (tmp_path / 'edit.json').write_text(json.dumps(E))
+    (tmp_path / 'words.json').write_text(json.dumps({'segments': [{'words': [{'w': 'Türkiye', 's': 0.0, 'e': 0.3, 'p': 0.9}, {'w': 'site', 's': 25.45, 'e': 25.8, 'p': 0.9}]}]}))
+    (tmp_path / 'report.json').write_text(json.dumps({'issues': [{'kind': 'in_word', 't': 1.0, 'cut': 1.0, 'words': ['Türkiye']}],
+                                                      'words': [{'w': 'Türkiye', 's': 0.95, 'e': 1.25}]}))
+    run(None)
+    assert all(n >= 0 for _, n in json.load(open(tmp_path / 'cut_fixes.json'))['snap'])          # an edge never opens before the clip starts
+
+
+@pytest.mark.skipif(not __import__('shutil').which('ffmpeg') or not importlib.util.find_spec('cv2') or not importlib.util.find_spec('scipy'),
+                    reason='a render test needs ffmpeg and the skills\' own install (setup_check.py)')
+def test_render_holds_the_speaker_over_a_covered_card(tmp_path):
+    """a moving source; the take covers 0.33-0.67 s: every frame in there is the same held picture, outside it moves."""
+    src = 'testsrc2=s=1440x2560:r=30:d=1'
+    cov = {'in': 0, 'out': 1, 'cover': [[0.333, 0.667]]}
+    frames = [_render(tmp_path, src, {'y': 0.8, 'size': 40}, seg=cov, at=t)[1] for t in (0.4, 0.6)]
+    assert abs(frames[0].astype(int) - frames[1].astype(int)).mean() < 2
+    plain = [_render(tmp_path, src, {'y': 0.8, 'size': 40}, at=t)[1] for t in (0.4, 0.6)]
+    assert abs(plain[0].astype(int) - plain[1].astype(int)).mean() > 2
+
+
+@pytest.mark.skipif(not __import__('shutil').which('ffmpeg') or not importlib.util.find_spec('cv2') or not importlib.util.find_spec('scipy'),
+                    reason='a render test needs ffmpeg and the skills\' own install (setup_check.py)')
+def test_render_fits_the_head_under_a_top_panel_and_keeps_captions_out_of_it(tmp_path):
+    """a black panel over the top half: the follow crop puts the hair under it (padding above the clip if needed), and a caption with
+    no room under the chin is not moved up into the panel."""
+    box = [720, 700, 260, 400, 420, 640, 800, 0.9]                # a head high in the clip: hair near the top
+    face = {'w': 1440, 'h': 2560, 'fps': 30, 'f': [box] * 30}
+    panel = {'kind': 'bar', 't': 0, 'e': 1, 'x': 0.5, 'y': 0.255, 'bar': {'w': 1080, 'h': 980, 'color': '#08080A'}}
+    w = tmp_path / 'work'; w.mkdir()
+    (w / 'face.json').write_text(json.dumps(face))
+    _render(tmp_path, 'testsrc2=s=1440x2560:r=30:d=1', {'y': 0.6, 'size': 60, 'below_face': 0.02, 'y_max': 0.7}, face, [panel])
+    E = json.load(open(w / 'edit.json')); E['follow'] = {'face': 'work/face.json'}; (w / 'edit.json').write_text(json.dumps(E))
+    import subprocess
+    r = subprocess.run([sys.executable, os.path.join(ROOT, VS[0], 'scripts', 'render.py'), 'work/edit.json', 'work/out.mp4'], cwd=tmp_path, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    rep = json.loads([x for x in r.stdout.splitlines() if x.startswith('{')][-1])
+    assert rep['caps_moved_above_face'] == []                                # never up into the panel
+    assert rep['head_in_panel'] == []                                        # the hair sits under the panel
+
+
+def test_caption_pages_keep_a_name_and_a_turkish_suffix_whole():
+    """«Türkiye Kullanıcı Grubu» is one name: pages never break inside it; «Wikipedia 'nın» from the ASR joins to «Wikipedia'nın»."""
+    sys.path.insert(0, os.path.join(ROOT, VS[0], 'scripts'))
+    import importlib; tlm = importlib.import_module('timeline')
+    ws = 'Türkiye Kullanıcı Grubu üyesi Caner.'.split()
+    assert [' '.join(ws[i:j]) for i, j in tlm.split_phrase(ws, 4, 24)] == ['Türkiye Kullanıcı Grubu', 'üyesi Caner.']
+    words = [('Bugün', 0.0, 0.3), ('Wikipedia', 0.35, 0.9), ("'nın", 0.9, 1.1), ('gücü', 1.15, 1.5), ('büyük.', 1.55, 2.0)]
+    d = {'segments': [{'words': [{'w': w, 's': a, 'e': b} for w, a, b in words]}]}
+    caps = tlm.pages_from_words(tlm.TL([(0.0, 2.0)], fixes={}), d, 4, 24)
+    text = ' '.join(c['text'] for c in caps)
+    assert "Wikipedia'nın" in text and " 'nın" not in text, text
