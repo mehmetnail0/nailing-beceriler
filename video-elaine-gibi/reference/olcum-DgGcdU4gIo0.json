@@ -1,0 +1,128 @@
+{
+ "meta": {
+  "w": 720,
+  "h": 1280,
+  "fps": 30.0,
+  "dur": 59.767
+ },
+ "cuts": {
+  "n": 1,
+  "per_min": 1.0,
+  "times": [
+   17.667
+  ],
+  "kinds": [
+   "hard"
+  ],
+  "kind_counts": {
+   "hard": 1
+  },
+  "shot_s": {
+   "median": 29.88,
+   "p25": 23.78,
+   "p75": 35.99,
+   "min": 17.67,
+   "max": 42.1
+  },
+  "gradual_times": [],
+  "punch_at_jump_cuts": []
+ },
+ "flashes": {
+  "n": 0,
+  "per_min": 0.0,
+  "list": []
+ },
+ "camera": {
+  "share_by_time": {
+   "still": 1.0
+  },
+  "push_pull_ease_median": null,
+  "zoom_per_shot_median": 0.997,
+  "method": "LK flow + similarity fit per frame; ease = progress at 25/50/75 % of the shot (linear .25/.5/.75)"
+ },
+ "shots": [
+  {
+   "t0": 0.0,
+   "d": 17.667,
+   "cam": "still",
+   "zoom": 0.993,
+   "travel": 0.016,
+   "rot": -1.02,
+   "jitter": 0.0002,
+   "ease": null
+  },
+  {
+   "t0": 17.667,
+   "d": 42.1,
+   "cam": "still",
+   "zoom": 1.001,
+   "travel": 0.016,
+   "rot": -0.55,
+   "jitter": 0.0002,
+   "ease": null
+  }
+ ],
+ "text": {
+  "present_share": 1.0,
+  "lines_per_screen": 2.48,
+  "y_p10": 0.269,
+  "y_median": 0.298,
+  "y_p90": 0.647,
+  "line_h_pct_median": 2.1,
+  "line_w_pct_median": 54.9,
+  "ink": {
+   "black": 294,
+   "red": 1,
+   "orange": 1,
+   "white": 1
+  },
+  "layout_changes_per_s": 0.77,
+  "method": "text-like stroke rows, no OCR; read the words on the sheet"
+ },
+ "face": {
+  "present_share": 0.125,
+  "cx_median": 0.528,
+  "cy_median": 0.497,
+  "h_median": 0.096,
+  "method": "Haar frontal, largest face, 2 fps"
+ },
+ "layout": {
+  "letterbox_share": 1.0,
+  "split_share": 1.0,
+  "split_y_median": 0.342,
+  "card_share": 0.0,
+  "bw_share": 0.0
+ },
+ "colour": {
+  "p5": 0.0,
+  "p50": 0.0,
+  "p95": 170.0,
+  "sat": 0.089,
+  "warm": 9.283,
+  "sh_a": 0.224,
+  "sh_b": 0.436,
+  "hl_a": -2.639,
+  "hl_b": 7.134,
+  "grain": 3.266,
+  "vig": 0.0,
+  "contrast": 170.0
+ },
+ "sound": {
+  "present": true,
+  "lufs_i": -14.3,
+  "lra": 4.8,
+  "peak_dbfs": -0.5,
+  "onsets_per_s": 3.36,
+  "tempo_bpm": 129.2,
+  "cuts_on_beat": 0.0,
+  "cuts_on_onset": 1.0,
+  "chance_on_onset": 0.47,
+  "hiband_at_cuts_db": 17.5,
+  "speech_share": 0.849,
+  "words_per_s": 2.28,
+  "voice_db": -15.7,
+  "gaps_db": -17.7,
+  "bed_under_voice_db": -2.0
+ },
+ "kaynak": "https://www.instagram.com/reel/DgGcdU4gIo0/"
+}

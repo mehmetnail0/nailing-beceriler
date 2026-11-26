@@ -1,0 +1,257 @@
+{
+ "meta": {
+  "w": 720,
+  "h": 1280,
+  "fps": 30.0,
+  "dur": 50.633
+ },
+ "cuts": {
+  "n": 10,
+  "per_min": 11.8,
+  "times": [
+   2.233,
+   3.433,
+   5.2,
+   15.833,
+   19.333,
+   22.533,
+   31.667,
+   32.367,
+   33.6,
+   48.033
+  ],
+  "kinds": [
+   "hard",
+   "hard",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "zoom",
+   "hard",
+   "hard",
+   "hard",
+   "whip/blur"
+  ],
+  "kind_counts": {
+   "hard": 5,
+   "whip/blur": 4,
+   "zoom": 1
+  },
+  "shot_s": {
+   "median": 2.6,
+   "p25": 1.5,
+   "p75": 6.32,
+   "min": 0.7,
+   "max": 14.43
+  },
+  "gradual_times": [],
+  "punch_at_jump_cuts": []
+ },
+ "flashes": {
+  "n": 0,
+  "per_min": 0.0,
+  "list": []
+ },
+ "camera": {
+  "share_by_time": {
+   "still": 0.658,
+   "pull-out": 0.21,
+   "push-in": 0.068,
+   "pan/slide": 0.063
+  },
+  "push_pull_ease_median": {
+   "at25": 0.24,
+   "at50": 0.41,
+   "at75": 0.9
+  },
+  "zoom_per_shot_median": 0.999,
+  "method": "LK flow + similarity fit per frame; ease = progress at 25/50/75 % of the shot (linear .25/.5/.75)"
+ },
+ "shots": [
+  {
+   "t0": 0.0,
+   "d": 2.233,
+   "cam": "push-in",
+   "zoom": 1.026,
+   "travel": 0.014,
+   "rot": 1.49,
+   "jitter": 0.0002,
+   "ease": {
+    "at25": 0.61,
+    "at50": 1.53,
+    "at75": 1.3
+   }
+  },
+  {
+   "t0": 2.233,
+   "d": 1.2,
+   "cam": "still",
+   "zoom": 0.996,
+   "travel": 0.002,
+   "rot": -0.3,
+   "jitter": 0.0002,
+   "ease": null
+  },
+  {
+   "t0": 3.433,
+   "d": 1.767,
+   "cam": "still",
+   "zoom": 0.999,
+   "travel": 0.002,
+   "rot": -0.33,
+   "jitter": 0.0004,
+   "ease": null
+  },
+  {
+   "t0": 5.2,
+   "d": 10.633,
+   "cam": "pull-out",
+   "zoom": 0.439,
+   "travel": 0.481,
+   "rot": 3.52,
+   "jitter": 0.0034,
+   "ease": {
+    "at25": 0.37,
+    "at50": 0.41,
+    "at75": 0.99
+   }
+  },
+  {
+   "t0": 15.833,
+   "d": 3.5,
+   "cam": "still",
+   "zoom": 1.016,
+   "travel": 0.031,
+   "rot": -0.49,
+   "jitter": 0.0007,
+   "ease": null
+  },
+  {
+   "t0": 19.333,
+   "d": 3.2,
+   "cam": "pan/slide",
+   "zoom": 1.032,
+   "travel": 0.069,
+   "rot": 5.45,
+   "jitter": 0.0003,
+   "ease": {
+    "at25": 0.11,
+    "at50": 0.42,
+    "at75": 0.8
+   }
+  },
+  {
+   "t0": 22.533,
+   "d": 9.133,
+   "cam": "still",
+   "zoom": 0.984,
+   "travel": 0.008,
+   "rot": -1.77,
+   "jitter": 0.0004,
+   "ease": null
+  },
+  {
+   "t0": 31.667,
+   "d": 0.7,
+   "cam": "still",
+   "zoom": 0.994,
+   "travel": 0.001,
+   "rot": -0.26,
+   "jitter": 0.0003,
+   "ease": null
+  },
+  {
+   "t0": 32.367,
+   "d": 1.233,
+   "cam": "push-in",
+   "zoom": 1.173,
+   "travel": 0.058,
+   "rot": -0.39,
+   "jitter": 0.0061,
+   "ease": {
+    "at25": -0.05,
+    "at50": -0.05,
+    "at75": -0.22
+   }
+  },
+  {
+   "t0": 33.6,
+   "d": 14.433,
+   "cam": "still",
+   "zoom": 0.978,
+   "travel": 0.026,
+   "rot": 5.75,
+   "jitter": 0.0003,
+   "ease": null
+  },
+  {
+   "t0": 48.033,
+   "d": 2.6,
+   "cam": "still",
+   "zoom": 1.018,
+   "travel": 0.01,
+   "rot": -0.67,
+   "jitter": 0.0002,
+   "ease": null
+  }
+ ],
+ "text": {
+  "present_share": 1.0,
+  "lines_per_screen": 4.75,
+  "y_p10": 0.167,
+  "y_median": 0.312,
+  "y_p90": 0.714,
+  "line_h_pct_median": 2.3,
+  "line_w_pct_median": 15.6,
+  "ink": {
+   "black": 295,
+   "white": 148,
+   "orange": 25,
+   "grey": 8
+  },
+  "layout_changes_per_s": 1.04,
+  "method": "text-like stroke rows, no OCR; read the words on the sheet"
+ },
+ "face": {
+  "present_share": 0.637,
+  "cx_median": 0.488,
+  "cy_median": 0.438,
+  "h_median": 0.115,
+  "method": "Haar frontal, largest face, 2 fps"
+ },
+ "layout": {
+  "letterbox_share": 0.843,
+  "split_share": 0.0,
+  "split_y_median": null,
+  "card_share": 0.196,
+  "bw_share": 0.539
+ },
+ "colour": {
+  "p5": 0.0,
+  "p50": 0.0,
+  "p95": 176.0,
+  "sat": 0.043,
+  "warm": 0.795,
+  "sh_a": -0.079,
+  "sh_b": 0.109,
+  "hl_a": -2.549,
+  "hl_b": 2.118,
+  "grain": 2.708,
+  "vig": 0.0,
+  "contrast": 176.0
+ },
+ "sound": {
+  "present": true,
+  "lufs_i": -14.1,
+  "lra": 6.7,
+  "peak_dbfs": -2.0,
+  "onsets_per_s": 4.29,
+  "tempo_bpm": 123.0,
+  "cuts_on_beat": 0.1,
+  "cuts_on_onset": 0.6,
+  "chance_on_onset": 0.6,
+  "hiband_at_cuts_db": 6.1,
+  "rms_db_median": -14.6
+ },
+ "kaynak": "https://www.instagram.com/reel/Df2Gs6vNbYN/"
+}

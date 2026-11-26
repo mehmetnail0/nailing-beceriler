@@ -1,9 +1,7 @@
 {
  "fps": 30,
  "mezz": "work/mezz.mp4",
- "mezz_w": 720,
- "mezz_h": 1280,
- "audio": "a48.wav",
+ "audio": "work/a48.wav",
  "lut": "work/look.cube",
  "fonts": "fonts",
  "style": "sade",

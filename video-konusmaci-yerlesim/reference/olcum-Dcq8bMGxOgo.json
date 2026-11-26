@@ -1,0 +1,245 @@
+{
+ "meta": {
+  "w": 720,
+  "h": 1280,
+  "fps": 30.0,
+  "dur": 39.2
+ },
+ "cuts": {
+  "n": 7,
+  "per_min": 10.7,
+  "times": [
+   7.033,
+   16.433,
+   19.933,
+   21.3,
+   29.0,
+   32.867,
+   38.6
+  ],
+  "kinds": [
+   "whip/blur",
+   "zoom",
+   "zoom",
+   "zoom",
+   "whip/blur",
+   "zoom",
+   "whip/blur"
+  ],
+  "kind_counts": {
+   "whip/blur": 3,
+   "zoom": 4
+  },
+  "shot_s": {
+   "median": 4.8,
+   "p25": 2.97,
+   "p75": 7.2,
+   "min": 0.6,
+   "max": 9.4
+  },
+  "gradual_times": [],
+  "punch_at_jump_cuts": [
+   {
+    "t": 16.433,
+    "scale": 1.087
+   },
+   {
+    "t": 19.933,
+    "scale": 1.087
+   },
+   {
+    "t": 21.3,
+    "scale": 0.928
+   },
+   {
+    "t": 32.867,
+    "scale": 0.966
+   },
+   {
+    "t": 38.6,
+    "scale": 0.842
+   }
+  ]
+ },
+ "flashes": {
+  "n": 0,
+  "per_min": 0.0,
+  "list": []
+ },
+ "camera": {
+  "share_by_time": {
+   "push-in": 0.522,
+   "pull-out": 0.24,
+   "still": 0.203,
+   "handheld": 0.035
+  },
+  "push_pull_ease_median": {
+   "at25": 0.35,
+   "at50": 0.23,
+   "at75": 0.54
+  },
+  "zoom_per_shot_median": 1.001,
+  "method": "LK flow + similarity fit per frame; ease = progress at 25/50/75 % of the shot (linear .25/.5/.75)"
+ },
+ "shots": [
+  {
+   "t0": 0.0,
+   "d": 7.033,
+   "cam": "push-in",
+   "zoom": 1.149,
+   "travel": 0.069,
+   "rot": -0.07,
+   "jitter": 0.0025,
+   "ease": {
+    "at25": 0.19,
+    "at50": 0.16,
+    "at75": 0.35
+   }
+  },
+  {
+   "t0": 7.033,
+   "d": 9.4,
+   "cam": "pull-out",
+   "zoom": 0.902,
+   "travel": 0.043,
+   "rot": 1.41,
+   "jitter": 0.0022,
+   "ease": {
+    "at25": 0.57,
+    "at50": 0.31,
+    "at75": 0.74
+   }
+  },
+  {
+   "t0": 16.433,
+   "d": 3.5,
+   "cam": "still",
+   "zoom": 0.991,
+   "travel": 0.008,
+   "rot": 4.35,
+   "jitter": 0.0007,
+   "ease": null
+  },
+  {
+   "t0": 19.933,
+   "d": 1.367,
+   "cam": "handheld",
+   "zoom": 0.992,
+   "travel": 0.016,
+   "rot": -0.03,
+   "jitter": 0.0054,
+   "ease": null
+  },
+  {
+   "t0": 21.3,
+   "d": 7.7,
+   "cam": "push-in",
+   "zoom": 1.062,
+   "travel": 0.034,
+   "rot": 1.72,
+   "jitter": 0.0017,
+   "ease": {
+    "at25": 0.51,
+    "at50": -0.18,
+    "at75": 1.37
+   }
+  },
+  {
+   "t0": 29.0,
+   "d": 3.867,
+   "cam": "still",
+   "zoom": 1.01,
+   "travel": 0.048,
+   "rot": 2.56,
+   "jitter": 0.0035,
+   "ease": null
+  },
+  {
+   "t0": 32.867,
+   "d": 5.733,
+   "cam": "push-in",
+   "zoom": 1.067,
+   "travel": 0.031,
+   "rot": 0.35,
+   "jitter": 0.0035,
+   "ease": {
+    "at25": 0.13,
+    "at50": 0.65,
+    "at75": 0.22
+   }
+  },
+  {
+   "t0": 38.6,
+   "d": 0.6,
+   "cam": "still",
+   "zoom": 0.98,
+   "travel": 0.033,
+   "rot": 0.13,
+   "jitter": 0.0035,
+   "ease": null
+  }
+ ],
+ "text": {
+  "present_share": 0.873,
+  "lines_per_screen": 2.41,
+  "y_p10": 0.154,
+  "y_median": 0.468,
+  "y_p90": 0.696,
+  "line_h_pct_median": 2.7,
+  "line_w_pct_median": 17.9,
+  "ink": {
+   "orange": 93,
+   "red": 38,
+   "black": 20,
+   "white": 12
+  },
+  "layout_changes_per_s": 1.65,
+  "method": "text-like stroke rows, no OCR; read the words on the sheet"
+ },
+ "face": {
+  "present_share": 0.975,
+  "cx_median": 0.462,
+  "cy_median": 0.404,
+  "h_median": 0.291,
+  "method": "Haar frontal, largest face, 2 fps"
+ },
+ "layout": {
+  "letterbox_share": 0.0,
+  "split_share": 0.013,
+  "split_y_median": 0.736,
+  "card_share": 0.0,
+  "bw_share": 0.0
+ },
+ "colour": {
+  "p5": 20.0,
+  "p50": 78.0,
+  "p95": 183.0,
+  "sat": 0.567,
+  "warm": 66.639,
+  "sh_a": 14.364,
+  "sh_b": 7.409,
+  "hl_a": 17.778,
+  "hl_b": 11.743,
+  "grain": 2.548,
+  "vig": 0.751,
+  "contrast": 163.0
+ },
+ "sound": {
+  "present": true,
+  "lufs_i": -14.6,
+  "lra": 4.6,
+  "peak_dbfs": 2.4,
+  "onsets_per_s": 5.59,
+  "tempo_bpm": 83.4,
+  "cuts_on_beat": 0.43,
+  "cuts_on_onset": 0.86,
+  "chance_on_onset": 0.78,
+  "hiband_at_cuts_db": 13.3,
+  "speech_share": 0.964,
+  "words_per_s": 2.5,
+  "voice_db": -16.4,
+  "gaps_db": -31.0,
+  "bed_under_voice_db": -14.6
+ },
+ "kaynak": "https://www.instagram.com/reel/Dcq8bMGxOgo/"
+}

@@ -11,7 +11,11 @@ SRC=${1:?source file}; WD=${2:?workdir}; MW=${3:-1440}; MH=${4:-2560}
 FF=${FF:-ffmpeg}; FP=${FP:-ffprobe}; ENC=${ENC:-libx264}
 mkdir -p "$WD"
 TRC=$($FP -v error -select_streams v:0 -show_entries stream=color_transfer -of csv=p=0 "$SRC" | head -1 | tr -d " ,\r")
-echo "source transfer: ${TRC:-unknown}"
+case "$TRC" in arib-std-b67) echo "source: HLG (phone HDR), tone-mapped to SDR";; smpte2084) echo "source: HDR10/PQ, tone-mapped to SDR";; *) echo "source: SDR (${TRC:-not tagged}), scaled only";; esac
+SWH=$($FP -v error -select_streams v:0 -show_entries stream=width,height:stream_side_data=rotation -of csv=p=0 "$SRC" | head -1)
+SW_=${SWH%%,*}; SH_=$(echo "$SWH" | cut -d, -f2); ROT=$($FP -v error -select_streams v:0 -show_entries stream_side_data=rotation -of csv=p=0 "$SRC" | head -1 | tr -d " ,-")
+case "$ROT" in 90|270) T_=$SW_; SW_=$SH_; SH_=$T_;; esac
+[ "${SW_:-0}" -gt "${SH_:-0}" ] 2>/dev/null && echo "note: horizontal clip (${SW_}x${SH_}): it is centre-cropped to 9:16 and the sides are lost; edit.json follow (face crop) keeps the speaker in frame. Look at src.jpg before choosing takes."
 FIT="scale=${MW}:${MH}:force_original_aspect_ratio=increase:flags=lanczos,crop=${MW}:${MH}"
 HAVE_Z=0; $FF -hide_banner -filters 2>/dev/null | grep -q ' zscale ' && $FF -hide_banner -filters 2>/dev/null | grep -q ' tonemap ' && HAVE_Z=1
 case "$TRC" in arib-std-b67|smpte2084) if [ $HAVE_Z = 0 ]; then

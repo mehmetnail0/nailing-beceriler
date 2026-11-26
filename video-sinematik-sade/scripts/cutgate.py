@@ -27,6 +27,8 @@ for r in range(1, A.rounds + 1):
     cj = f'{A.out}/cuts_r{r}.json'; json.dump(dict(pieces=pieces), open(cj, 'w')); cuts = pieces[1:]
     src = ['--src', E['audio']] if E.get('audio') and os.path.exists(E['audio']) else []
     q = py(f'{H}/kesim_qc.py', A.video, '--cuts', cj, '--lang', A.lang, '--out', f'{A.out}/r{r}', *src)
+    if not os.path.exists(f'{A.out}/r{r}/report.json'):
+        sys.exit(f'kesim_qc.py wrote no report (exit {q.returncode}):\n' + (q.stderr or q.stdout)[-1500:])
     R = json.load(open(f'{A.out}/r{r}/report.json'))
     log.append(dict(round=r, cuts=len(cuts), issues=R['issues']))
     if q.returncode == 0 and not R['issues']: break

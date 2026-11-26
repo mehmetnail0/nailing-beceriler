@@ -1,6 +1,6 @@
 """Eased motion, as numbers you can put straight into edit.json (camera keys and layer moves). Import it in decide.py:
     sys.path.insert(0, 'scripts'); from hareket import AE, move_d, snap, drift
-These are measured starting values, not a look: the refs you read (reference/hareket*.json, your own ref) win over them.
+These are measured starting values, not a look: the measured refs in reference/ and your own ref win over them.
   AE        cubic-bezier(0.5, 0, 0.2, 1.08): slow start, about 3 % past the mark, settle (the After Effects "easy ease" feel)
   move_d    how long a move of N px should take so it reads as a move, not a jump (300 px or more: at least 0.75 s)
   snap      a quick push on an emphasis line (1.18x in 0.32 s, ease-out) and a slow way back

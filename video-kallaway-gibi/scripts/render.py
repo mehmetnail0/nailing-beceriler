@@ -22,7 +22,11 @@ a = ap.parse_args()
 E = json.load(open(a.edit))
 FF = os.environ.get('FF', 'ffmpeg')
 FPS, W, H = E.get('fps', 30), 1080, 1920
-SW, SH = E.get('mezz_w', 1440), E.get('mezz_h', 2560)
+try:      # the mezzanine's real size wins over a number copied into edit.json
+    SW, SH = map(int, subprocess.run([FF.replace('ffmpeg', 'ffprobe'), '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height',
+                                      '-of', 'csv=p=0', E['mezz']], capture_output=True, text=True, check=True).stdout.strip().split(',')[:2])
+except Exception:
+    SW, SH = E.get('mezz_w', 1440), E.get('mezz_h', 2560)
 FONTS = E.get('fonts', os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'fonts'))
 ST = E['style']
 T0 = time.time()
@@ -981,7 +985,7 @@ if mu:                                               # music: {file, db, start (
 else: last = 'vo'
 fx_ = [x for x in E.get('sfx', []) if sl[0] - 0.01 <= x['t'] < sl[1]]   # sfx: [{t (output s), file, db (gain, about -12..-19 under the voice), lp (Hz low-pass), fade (s soft start)}]
 for k, x in enumerate(fx_):
-    ain += ['-i', x['file']]; n_ = len(ain) // 2 - 1; dl = int(round((x['t'] - sl[0]) * 1000))
+    ain += ['-i', x['file']]; n_ = ain.count('-i') - 1; dl = int(round((x['t'] - sl[0]) * 1000))
     af.append(f"[{n_}:a]aresample=48000,aformat=channel_layouts=mono,volume={x.get('db', -16)}dB" + (f",lowpass=f={x['lp']}" if x.get('lp') else '')
               + f",afade=t=in:d={x.get('fade', 0.08)},adelay={dl}:all=1[s{k}]")
 if fx_:

@@ -1,0 +1,902 @@
+{
+ "meta": {
+  "w": 720,
+  "h": 1280,
+  "fps": 23.976,
+  "dur": 98.14
+ },
+ "cuts": {
+  "n": 52,
+  "per_min": 31.8,
+  "times": [
+   2.586,
+   2.669,
+   4.546,
+   7.674,
+   9.468,
+   12.137,
+   14.473,
+   18.602,
+   20.729,
+   23.106,
+   25.734,
+   31.114,
+   32.533,
+   33.492,
+   34.535,
+   35.369,
+   35.452,
+   35.536,
+   35.786,
+   35.994,
+   36.745,
+   37.538,
+   38.956,
+   40.082,
+   42.668,
+   44.92,
+   46.088,
+   47.214,
+   47.714,
+   47.881,
+   48.632,
+   50.592,
+   53.053,
+   55.973,
+   57.975,
+   62.229,
+   63.73,
+   63.856,
+   68.151,
+   72.281,
+   75.701,
+   78.871,
+   79.746,
+   79.83,
+   79.997,
+   82.374,
+   84.168,
+   85.502,
+   88.881,
+   91.884,
+   94.72,
+   94.845
+  ],
+  "kinds": [
+   "whip/blur",
+   "whip/blur",
+   "zoom",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur",
+   "whip/blur"
+  ],
+  "kind_counts": {
+   "whip/blur": 51,
+   "zoom": 1
+  },
+  "shot_s": {
+   "median": 1.79,
+   "p25": 0.79,
+   "p75": 2.67,
+   "min": 0.08,
+   "max": 5.38
+  },
+  "gradual_times": [],
+  "punch_at_jump_cuts": [
+   {
+    "t": 4.546,
+    "scale": 0.648
+   },
+   {
+    "t": 42.668,
+    "scale": 1.123
+   }
+  ]
+ },
+ "flashes": {
+  "n": 0,
+  "per_min": 0.0,
+  "list": []
+ },
+ "camera": {
+  "share_by_time": {
+   "pull-out": 0.419,
+   "push-in": 0.408,
+   "still": 0.098,
+   "pan/slide": 0.073,
+   "handheld": 0.002
+  },
+  "push_pull_ease_median": {
+   "at25": 0.35,
+   "at50": 0.71,
+   "at75": 0.92
+  },
+  "zoom_per_shot_median": 1.0,
+  "method": "LK flow + similarity fit per frame; ease = progress at 25/50/75 % of the shot (linear .25/.5/.75)"
+ },
+ "shots": [
+  {
+   "t0": 0.0,
+   "d": 2.586,
+   "cam": "push-in",
+   "zoom": 1.28,
+   "travel": 0.066,
+   "rot": -0.23,
+   "jitter": 0.0012,
+   "ease": {
+    "at25": 0.57,
+    "at50": 0.83,
+    "at75": 0.96
+   }
+  },
+  {
+   "t0": 2.586,
+   "d": 0.083,
+   "cam": "still",
+   "zoom": 0.998,
+   "travel": 0.0,
+   "rot": 0.09,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 2.669,
+   "d": 1.877,
+   "cam": "pull-out",
+   "zoom": 0.778,
+   "travel": 0.041,
+   "rot": 1.39,
+   "jitter": 0.0023,
+   "ease": {
+    "at25": 0.64,
+    "at50": 0.87,
+    "at75": 0.94
+   }
+  },
+  {
+   "t0": 4.546,
+   "d": 3.128,
+   "cam": "pan/slide",
+   "zoom": 1.015,
+   "travel": 0.061,
+   "rot": 0.66,
+   "jitter": 0.0035,
+   "ease": {
+    "at25": 0.89,
+    "at50": 0.97,
+    "at75": 0.97
+   }
+  },
+  {
+   "t0": 7.674,
+   "d": 1.793,
+   "cam": "push-in",
+   "zoom": 1.083,
+   "travel": 0.003,
+   "rot": -0.51,
+   "jitter": 0.0004,
+   "ease": {
+    "at25": 0.35,
+    "at50": 0.6,
+    "at75": 0.91
+   }
+  },
+  {
+   "t0": 9.468,
+   "d": 2.669,
+   "cam": "pull-out",
+   "zoom": 0.941,
+   "travel": 0.002,
+   "rot": -0.34,
+   "jitter": 0.0002,
+   "ease": {
+    "at25": 0.12,
+    "at50": 0.45,
+    "at75": 0.68
+   }
+  },
+  {
+   "t0": 12.137,
+   "d": 2.336,
+   "cam": "push-in",
+   "zoom": 1.163,
+   "travel": 0.083,
+   "rot": -5.25,
+   "jitter": 0.0082,
+   "ease": {
+    "at25": 0.13,
+    "at50": 0.13,
+    "at75": 0.82
+   }
+  },
+  {
+   "t0": 14.473,
+   "d": 4.129,
+   "cam": "push-in",
+   "zoom": 1.103,
+   "travel": 0.003,
+   "rot": 0.24,
+   "jitter": 0.0003,
+   "ease": {
+    "at25": 0.17,
+    "at50": 0.43,
+    "at75": 0.69
+   }
+  },
+  {
+   "t0": 18.602,
+   "d": 2.127,
+   "cam": "pull-out",
+   "zoom": 0.725,
+   "travel": 0.037,
+   "rot": -1.99,
+   "jitter": 0.0024,
+   "ease": {
+    "at25": 0.55,
+    "at50": 0.88,
+    "at75": 0.96
+   }
+  },
+  {
+   "t0": 20.729,
+   "d": 2.377,
+   "cam": "pull-out",
+   "zoom": 0.768,
+   "travel": 0.008,
+   "rot": -0.04,
+   "jitter": 0.0003,
+   "ease": {
+    "at25": 0.66,
+    "at50": 0.89,
+    "at75": 0.98
+   }
+  },
+  {
+   "t0": 23.106,
+   "d": 2.628,
+   "cam": "pull-out",
+   "zoom": 0.782,
+   "travel": 0.196,
+   "rot": -3.1,
+   "jitter": 0.0129,
+   "ease": {
+    "at25": 0.33,
+    "at50": 0.79,
+    "at75": 0.96
+   }
+  },
+  {
+   "t0": 25.734,
+   "d": 5.38,
+   "cam": "push-in",
+   "zoom": 1.099,
+   "travel": 0.006,
+   "rot": -0.13,
+   "jitter": 0.0003,
+   "ease": {
+    "at25": 0.23,
+    "at50": 0.54,
+    "at75": 0.76
+   }
+  },
+  {
+   "t0": 31.114,
+   "d": 1.418,
+   "cam": "pull-out",
+   "zoom": 0.909,
+   "travel": 0.007,
+   "rot": -2.66,
+   "jitter": 0.0006,
+   "ease": {
+    "at25": 0.21,
+    "at50": 0.46,
+    "at75": 0.73
+   }
+  },
+  {
+   "t0": 32.533,
+   "d": 0.959,
+   "cam": "still",
+   "zoom": 0.984,
+   "travel": 0.008,
+   "rot": 0.03,
+   "jitter": 0.0003,
+   "ease": null
+  },
+  {
+   "t0": 33.492,
+   "d": 1.043,
+   "cam": "push-in",
+   "zoom": 1.06,
+   "travel": 0.102,
+   "rot": -15.35,
+   "jitter": 0.0046,
+   "ease": {
+    "at25": 0.36,
+    "at50": 0.96,
+    "at75": 1.47
+   }
+  },
+  {
+   "t0": 34.535,
+   "d": 0.834,
+   "cam": "still",
+   "zoom": 0.997,
+   "travel": 0.002,
+   "rot": 0.09,
+   "jitter": 0.0004,
+   "ease": null
+  },
+  {
+   "t0": 35.369,
+   "d": 0.083,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": 0.0,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 35.452,
+   "d": 0.083,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": 0.02,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 35.536,
+   "d": 0.25,
+   "cam": "still",
+   "zoom": 0.999,
+   "travel": 0.001,
+   "rot": -0.14,
+   "jitter": 0.0004,
+   "ease": null
+  },
+  {
+   "t0": 35.786,
+   "d": 0.209,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": 0.0,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 35.994,
+   "d": 0.751,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": -0.01,
+   "jitter": 0.0001,
+   "ease": null
+  },
+  {
+   "t0": 36.745,
+   "d": 0.792,
+   "cam": "still",
+   "zoom": 1.002,
+   "travel": 0.006,
+   "rot": 0.31,
+   "jitter": 0.0007,
+   "ease": null
+  },
+  {
+   "t0": 37.538,
+   "d": 1.418,
+   "cam": "pan/slide",
+   "zoom": 1.004,
+   "travel": 0.051,
+   "rot": -1.33,
+   "jitter": 0.0094,
+   "ease": {
+    "at25": 0.16,
+    "at50": 0.4,
+    "at75": 0.75
+   }
+  },
+  {
+   "t0": 38.956,
+   "d": 1.126,
+   "cam": "still",
+   "zoom": 1.002,
+   "travel": 0.013,
+   "rot": -1.16,
+   "jitter": 0.003,
+   "ease": null
+  },
+  {
+   "t0": 40.082,
+   "d": 2.586,
+   "cam": "push-in",
+   "zoom": 1.067,
+   "travel": 0.063,
+   "rot": -1.09,
+   "jitter": 0.0041,
+   "ease": {
+    "at25": -1.16,
+    "at50": -0.76,
+    "at75": -0.42
+   }
+  },
+  {
+   "t0": 42.668,
+   "d": 2.252,
+   "cam": "push-in",
+   "zoom": 1.076,
+   "travel": 0.022,
+   "rot": 0.56,
+   "jitter": 0.0046,
+   "ease": {
+    "at25": 0.69,
+    "at50": 0.85,
+    "at75": 0.98
+   }
+  },
+  {
+   "t0": 44.92,
+   "d": 1.168,
+   "cam": "pull-out",
+   "zoom": 0.973,
+   "travel": 0.035,
+   "rot": -0.66,
+   "jitter": 0.0027,
+   "ease": {
+    "at25": 0.18,
+    "at50": 0.41,
+    "at75": 0.83
+   }
+  },
+  {
+   "t0": 46.088,
+   "d": 1.126,
+   "cam": "still",
+   "zoom": 1.004,
+   "travel": 0.015,
+   "rot": -0.27,
+   "jitter": 0.0005,
+   "ease": null
+  },
+  {
+   "t0": 47.214,
+   "d": 0.501,
+   "cam": "pan/slide",
+   "zoom": 0.971,
+   "travel": 0.163,
+   "rot": 9.2,
+   "jitter": 0.0198,
+   "ease": {
+    "at25": 0.18,
+    "at50": 0.47,
+    "at75": 0.9
+   }
+  },
+  {
+   "t0": 47.714,
+   "d": 0.167,
+   "cam": "handheld",
+   "zoom": 1.003,
+   "travel": 0.01,
+   "rot": -0.13,
+   "jitter": 0.0044,
+   "ease": null
+  },
+  {
+   "t0": 47.881,
+   "d": 0.751,
+   "cam": "push-in",
+   "zoom": 1.086,
+   "travel": 0.104,
+   "rot": -3.63,
+   "jitter": 0.0151,
+   "ease": {
+    "at25": 0.38,
+    "at50": 0.96,
+    "at75": 1.26
+   }
+  },
+  {
+   "t0": 48.632,
+   "d": 1.96,
+   "cam": "pan/slide",
+   "zoom": 0.953,
+   "travel": 0.444,
+   "rot": -5.6,
+   "jitter": 0.0335,
+   "ease": {
+    "at25": 0.26,
+    "at50": 0.56,
+    "at75": 0.71
+   }
+  },
+  {
+   "t0": 50.592,
+   "d": 2.461,
+   "cam": "push-in",
+   "zoom": 1.274,
+   "travel": 0.065,
+   "rot": -0.14,
+   "jitter": 0.0012,
+   "ease": {
+    "at25": 0.57,
+    "at50": 0.83,
+    "at75": 0.98
+   }
+  },
+  {
+   "t0": 53.053,
+   "d": 2.92,
+   "cam": "push-in",
+   "zoom": 1.617,
+   "travel": 0.243,
+   "rot": 2.15,
+   "jitter": 0.02,
+   "ease": {
+    "at25": -0.01,
+    "at50": 0.03,
+    "at75": 0.96
+   }
+  },
+  {
+   "t0": 55.973,
+   "d": 2.002,
+   "cam": "pull-out",
+   "zoom": 0.77,
+   "travel": 0.007,
+   "rot": -0.04,
+   "jitter": 0.0004,
+   "ease": {
+    "at25": 0.59,
+    "at50": 0.83,
+    "at75": 0.97
+   }
+  },
+  {
+   "t0": 57.975,
+   "d": 4.254,
+   "cam": "pull-out",
+   "zoom": 0.673,
+   "travel": 0.006,
+   "rot": -0.64,
+   "jitter": 0.0002,
+   "ease": {
+    "at25": 0.36,
+    "at50": 0.79,
+    "at75": 0.98
+   }
+  },
+  {
+   "t0": 62.229,
+   "d": 1.502,
+   "cam": "push-in",
+   "zoom": 1.246,
+   "travel": 0.061,
+   "rot": -0.29,
+   "jitter": 0.0014,
+   "ease": {
+    "at25": 0.38,
+    "at50": 0.73,
+    "at75": 0.87
+   }
+  },
+  {
+   "t0": 63.73,
+   "d": 0.125,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": 0.0,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 63.856,
+   "d": 4.296,
+   "cam": "pull-out",
+   "zoom": 0.415,
+   "travel": 0.338,
+   "rot": -6.57,
+   "jitter": 0.0157,
+   "ease": {
+    "at25": 0.4,
+    "at50": 0.85,
+    "at75": 0.99
+   }
+  },
+  {
+   "t0": 68.151,
+   "d": 4.129,
+   "cam": "push-in",
+   "zoom": 1.068,
+   "travel": 0.004,
+   "rot": 0.09,
+   "jitter": 0.0003,
+   "ease": {
+    "at25": 0.2,
+    "at50": 0.45,
+    "at75": 0.89
+   }
+  },
+  {
+   "t0": 72.281,
+   "d": 3.42,
+   "cam": "pull-out",
+   "zoom": 0.628,
+   "travel": 0.105,
+   "rot": 11.65,
+   "jitter": 0.0025,
+   "ease": {
+    "at25": 0.39,
+    "at50": 0.69,
+    "at75": 0.85
+   }
+  },
+  {
+   "t0": 75.701,
+   "d": 3.17,
+   "cam": "pull-out",
+   "zoom": 0.929,
+   "travel": 0.002,
+   "rot": 0.02,
+   "jitter": 0.0003,
+   "ease": {
+    "at25": 0.22,
+    "at50": 0.41,
+    "at75": 0.78
+   }
+  },
+  {
+   "t0": 78.871,
+   "d": 0.876,
+   "cam": "pull-out",
+   "zoom": 0.872,
+   "travel": 0.149,
+   "rot": -8.93,
+   "jitter": 0.0153,
+   "ease": {
+    "at25": 0.05,
+    "at50": 0.28,
+    "at75": 0.62
+   }
+  },
+  {
+   "t0": 79.746,
+   "d": 0.083,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": 0.0,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 79.83,
+   "d": 0.167,
+   "cam": "pan/slide",
+   "zoom": 0.976,
+   "travel": 0.081,
+   "rot": 4.82,
+   "jitter": 0.038,
+   "ease": null
+  },
+  {
+   "t0": 79.997,
+   "d": 2.377,
+   "cam": "pull-out",
+   "zoom": 0.737,
+   "travel": 0.158,
+   "rot": 8.46,
+   "jitter": 0.0143,
+   "ease": {
+    "at25": 0.41,
+    "at50": 0.84,
+    "at75": 0.87
+   }
+  },
+  {
+   "t0": 82.374,
+   "d": 1.793,
+   "cam": "pull-out",
+   "zoom": 0.789,
+   "travel": 0.013,
+   "rot": 0.51,
+   "jitter": 0.0004,
+   "ease": {
+    "at25": 0.54,
+    "at50": 0.78,
+    "at75": 0.93
+   }
+  },
+  {
+   "t0": 84.168,
+   "d": 1.335,
+   "cam": "pull-out",
+   "zoom": 0.946,
+   "travel": 0.045,
+   "rot": -3.03,
+   "jitter": 0.0052,
+   "ease": {
+    "at25": -0.41,
+    "at50": 0.35,
+    "at75": 1.11
+   }
+  },
+  {
+   "t0": 85.502,
+   "d": 3.378,
+   "cam": "push-in",
+   "zoom": 1.072,
+   "travel": 0.01,
+   "rot": -0.48,
+   "jitter": 0.0004,
+   "ease": {
+    "at25": 0.21,
+    "at50": 0.51,
+    "at75": 0.7
+   }
+  },
+  {
+   "t0": 88.881,
+   "d": 3.003,
+   "cam": "still",
+   "zoom": 0.993,
+   "travel": 0.02,
+   "rot": 2.08,
+   "jitter": 0.001,
+   "ease": null
+  },
+  {
+   "t0": 91.884,
+   "d": 2.836,
+   "cam": "push-in",
+   "zoom": 1.279,
+   "travel": 0.066,
+   "rot": -0.43,
+   "jitter": 0.001,
+   "ease": {
+    "at25": 0.64,
+    "at50": 0.91,
+    "at75": 0.98
+   }
+  },
+  {
+   "t0": 94.72,
+   "d": 0.125,
+   "cam": "still",
+   "zoom": 1.0,
+   "travel": 0.0,
+   "rot": 0.0,
+   "jitter": 0.0,
+   "ease": null
+  },
+  {
+   "t0": 94.845,
+   "d": 3.295,
+   "cam": "pull-out",
+   "zoom": 0.731,
+   "travel": 0.031,
+   "rot": -1.29,
+   "jitter": 0.0013,
+   "ease": {
+    "at25": 0.35,
+    "at50": 0.8,
+    "at75": 0.97
+   }
+  }
+ ],
+ "text": {
+  "present_share": 0.832,
+  "lines_per_screen": 1.97,
+  "y_p10": 0.147,
+  "y_median": 0.411,
+  "y_p90": 0.777,
+  "line_h_pct_median": 2.5,
+  "line_w_pct_median": 20.5,
+  "ink": {
+   "white": 108,
+   "black": 81,
+   "orange": 76,
+   "grey": 24
+  },
+  "layout_changes_per_s": 1.33,
+  "method": "text-like stroke rows, no OCR; read the words on the sheet"
+ },
+ "face": {
+  "present_share": 0.492,
+  "cx_median": 0.467,
+  "cy_median": 0.359,
+  "h_median": 0.186,
+  "method": "Haar frontal, largest face, 2 fps"
+ },
+ "layout": {
+  "letterbox_share": 0.0,
+  "split_share": 0.01,
+  "split_y_median": 0.803,
+  "card_share": 0.005,
+  "bw_share": 0.228
+ },
+ "colour": {
+  "p5": 19.0,
+  "p50": 91.0,
+  "p95": 170.0,
+  "sat": 0.2,
+  "warm": 7.517,
+  "sh_a": 2.435,
+  "sh_b": -0.659,
+  "hl_a": 1.788,
+  "hl_b": 2.823,
+  "grain": 2.028,
+  "vig": 1.061,
+  "contrast": 151.0
+ },
+ "sound": {
+  "present": true,
+  "lufs_i": -14.1,
+  "lra": 2.5,
+  "peak_dbfs": 0.1,
+  "onsets_per_s": 5.51,
+  "tempo_bpm": 89.1,
+  "cuts_on_beat": 0.21,
+  "cuts_on_onset": 0.73,
+  "chance_on_onset": 0.77,
+  "hiband_at_cuts_db": 12.2,
+  "speech_share": 0.955,
+  "words_per_s": 3.31,
+  "voice_db": -14.5,
+  "gaps_db": -22.2,
+  "bed_under_voice_db": -7.7
+ },
+ "kaynak": "https://www.instagram.com/reel/DcTSduARyXB/"
+}
